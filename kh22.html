@@ -34,7 +34,7 @@ body {
     color: bisque;
     min-height: 100vh;
     overflow-x: hidden;
-    /* السر هنا لضبط الفوتر في الأسفل دائماً */
+    /* لضبط الفوتر في الأسفل دائماً */
     display: flex;
     flex-direction: column;
 }
@@ -154,7 +154,7 @@ header h1 {
     max-width: 1200px;
     margin: 0 auto;
     text-align: center;
-    flex-grow: 1; /* لجعل المحتوى يأخذ المساحة المتبقية ويترك الأسفل للفوتر */
+    flex-grow: 1; 
 }
 
 #hh {
@@ -202,13 +202,6 @@ header h1 {
     font-size: 14px;
 }
 
-#searchInput::-webkit-search-decoration,
-#searchInput::-webkit-search-cancel-button,
-#searchInput::-webkit-search-results-button,
-#searchInput::-webkit-search-results-decoration {
-    display: none;
-}
-
 #searchBtn {
     background-color: #3b82f6;
     border: none;
@@ -219,16 +212,12 @@ header h1 {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background-color 0.9s ease, transform 0.9s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 #searchBtn:hover {
     background-color: #2563eb;
     transform: scale(1.05);
-}
-
-#searchBtn:active {
-    transform: scale(2s);
 }
 
 #ss {
@@ -276,10 +265,10 @@ header h1 {
 }
 
 /* ==========================================
-   4. الفوتر (ثابت بالأسفل حتى بالهواتف الطويلة)
+   4. الفوتر
    ========================================== */
 footer {
-    margin-top: auto; /* يجبر الفوتر على الالتصاق بالأسفل تماماً */
+    margin-top: auto; 
     width: 100%;
 }
 
@@ -297,14 +286,13 @@ footer {
     font-size: 14px;
 }
 
-/* تأثير الهايلايت */
+/* تأثير الهايلايت للبحث */
 .custom-highlight {
-    background-color: #0044ff !important;
-    color: #ffffff !important;
-    padding: 2px 6px;
+    background-color: #ffeb3b !important;
+    color: #000000 !important;
+    padding: 2px 4px;
     border-radius: 4px;
     font-weight: bold;
-    box-shadow: 0 2px 8px rgba(0, 68, 255, 0.3);
 }
 
 @keyframes fadeIn {
@@ -366,9 +354,9 @@ footer {
           <li><a href="active.html">حالة النشاط</a></li>      
           <li><a href="Activities.html">الأنشطة</a></li>
           <li><a href="ask.html">حجز الملعب</a></li>
-          <li>  <a href="messages.html">رسائل جماعية هامة</a></li>
+          <li><a href="messages.html">رسائل جماعية هامة</a></li>
           <li><a href="games.html">ألعاب متاحة</a></li>
-          <li><a href="workers.html"> هيئة العمل </a></li>
+          <li><a href="workers.html">هيئة العمل</a></li>
           <li><a href="global.html">نبذة عامة</a></li>
         </ul>
       </div>
@@ -386,21 +374,21 @@ footer {
     </header>
 
     <main class="body1" id="body1">
-      <h2 id="hh">مرحبا خالد</h2>
+      <h2 id="hh">مرحباً بك</h2>
       
       <form onsubmit="event.preventDefault(); performSearch();">
         <div class="search-container">
           <button type="submit" id="searchBtn">
             <i class="fa-solid fa-magnifying-glass" id="ss"></i>
           </button>
-          <input type="search" id="searchInput" placeholder="ابحث هنا...">
+          <input type="search" id="searchInput" placeholder="ابحث في عناصر الصفحة...">
         </div>
       </form>
       
       <h3>موقعنا الجغرافي</h3>
       <div class="map-container">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d964.2650907362288!2d31.86616469960835!3d31.2013701308117!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14f9c3512c6ba30f%3A0x959eee74a208ba52!2z2YXYsdmD2LIg2LTYqNin2Kgg2KfZhNmF2K3ZhNin2YjZig!5e1!3m2!1sen!2seg!4v1781746694359!5m2!1sen!2seg"
+          src="https://maps.google.com/maps?q=مركز%20شباب%20المحلاوي&t=&z=15&ie=UTF8&iwloc=&output=embed"
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
         ></iframe>
@@ -414,6 +402,75 @@ footer {
       </div>    
     </footer>
 
-    <script src="kh.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+      // ⚙️ إعدادات الفايربيز الموحدة لمشروعك Marcaz Shabab
+      const firebaseConfig = {
+          apiKey: "AIzaSyBpDxW-UlQSFqYfnUCTSb4acEe7pp8dV_c",
+          authDomain: "marcazshabab.firebaseapp.com",
+          databaseURL: "https://marcazshabab-default-rtdb.firebaseio.com",
+          projectId: "marcazshabab",
+          storageBucket: "marcazshabab.firebasestorage.app",
+          messagingSenderId: "403954625189",
+          appId: "1:403954625189:web:b49405402e5fcdf1723b4c"
+      };
+
+      // تشغيل السيرفر
+      firebase.initializeApp(firebaseConfig);
+      const database = firebase.database();
+
+      document.addEventListener('DOMContentLoaded', () => {
+          // جلب اسم الحساب الحالي المسجل محلياً لعرض ترحيب مخصص
+          const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+          if (currentUser && currentUser.username) {
+              document.getElementById('hh').innerText = `مرحباً ${currentUser.username}`;
+          } else {
+              document.getElementById('hh').innerText = `مرحباً بك في مركز الشباب`;
+          }
+      });
+
+      // دالة البحث الذكي داخل نصوص عناصر الصفحة الرئيسية
+      function performSearch() {
+          const query = document.getElementById('searchInput').value.trim().toLowerCase();
+          if (!query) return;
+
+          // إزالة أي تمييز (Highlight) قديم
+          const dynamicHighlights = document.querySelectorAll('.custom-highlight');
+          dynamicHighlights.forEach(el => {
+              el.replaceWith(document.createTextNode(el.textContent));
+          });
+
+          // البحث في النصوص داخل حاوية الجسم الرئيسي
+          const bodyContainer = document.getElementById('body1');
+          const walker = document.createTreeWalker(bodyContainer, NodeFilter.SHOW_TEXT, null, false);
+          let textNode;
+          const matches = [];
+
+          while (textNode = walker.nextNode()) {
+              if (textNode.nodeValue.toLowerCase().includes(query) && textNode.parentNode.tagName !== 'SCRIPT' && textNode.parentNode.tagName !== 'STYLE') {
+                  matches.push(textNode);
+              }
+          }
+
+          if (matches.length > 0) {
+              matches.forEach(node => {
+                  const text = node.nodeValue;
+                  const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
+                  const span = document.createElement('span');
+                  span.innerHTML = text.replace(regex, '<span class="custom-highlight">$1</span>');
+                  node.parentNode.replaceChild(span, node);
+              });
+              alert(`تم العثور على (${matches.length}) من المطابقات وتحديدها باللون الأصفر!`);
+          } else {
+              alert('عذراً، لم يتم العثور على نتائج تطابق بحثك.');
+          }
+      }
+
+      function escapeRegExp(string) {
+          return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }
+    </script>
   </body>
 </html>

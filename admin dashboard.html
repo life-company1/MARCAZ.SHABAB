@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم الأدمن</title>
+  <style>
+    body { margin: 0; padding: 30px; font-family: sans-serif; background: #000000; color: #fff; }
+    .admin-container { max-width: 900px; margin: 0 auto; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 12px; }
+    h1 { text-align: center; margin-bottom: 30px; }
+    table { width: 100%; border-collapse: collapse; background: rgba(0,0,0,0.3); }
+    th, td { padding: 12px; text-align: right; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    th { background: #6c5ce7; }
+    .no-data { text-align: center; padding: 20px; color: #ccc; }
+    .delete-btn { background: #ff7675; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+    .status-btn { background: #2ecc71; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; margin: 5px; }
+    .status-btn.off { background: #e74c3c; }
+  </style>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+        
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: #f8fafc; 
+            color: #334155;
+            padding: 30px; 
+        }
+        
+        .grid { 
+            max-width: 1300px; 
+            margin: 0 auto; 
+            display: grid; 
+            grid-template-columns: 380px 1fr; 
+            gap: 24px; 
+        }
+        
+        .card { 
+            background: white; 
+            padding: 24px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); 
+            border: 1px solid #e2e8f0;
+        }
+        
+        h2 { 
+            font-size: 16px; 
+            margin-bottom: 20px; 
+            color: #0f172a; 
+            border-bottom: 2px solid #e2e8f0; 
+            padding-bottom: 8px; 
+            font-weight: 700;
+        }
+        
+        .form-group { 
+            margin-bottom: 16px; 
+        }
+        
+        label { 
+            display: block; 
+            font-size: 13px; 
+            font-weight: 600; 
+            margin-bottom: 6px; 
+            color: #475569;
+        }
+        
+        input { 
+            width: 100%; 
+            padding: 10px 12px; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 6px; 
+            font-family: 'Cairo'; 
+            font-size: 14px;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+        
+        input:focus { 
+            border-color: #0f172a; 
+            outline: none; 
+            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+        }
+        
+        .btn { 
+            width: 100%; 
+            padding: 12px; 
+            border: none; 
+            border-radius: 6px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            font-family: 'Cairo'; 
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .btn-add { 
+            background: #0f172a; 
+            color: white; 
+        }
+        
+        .btn-add:hover { 
+            background: #1e293b; 
+        }
+        
+        .btn-delete { 
+            background: #ef4444; 
+            color: white; 
+            padding: 5px 10px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-family: 'Cairo';
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-size: 14px; 
+            text-align: center; 
+        }
+        
+        th, td { 
+            border-bottom: 1px solid #e2e8f0; 
+            padding: 12px; 
+        }
+        
+        th { 
+            background: #f1f5f9; 
+            color: #475569;
+            font-weight: 700;
+        }
+        
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+
+  <div class="admin-container">
+    <h1>لوحة تحكم الإدارة - بيانات المستخدمين</h1>
+
+    <!-- أزرار التحكم في النشاط -->
+    <div style="margin-bottom:15px; text-align:center;">
+      <button class="status-btn" onclick="setCenterStatus(true)">فتح المركز</button>
+      <button class="status-btn off" onclick="setCenterStatus(false)">غلق المركز</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>اسم المستخدم</th>
+          <th>العنوان</th>
+          <th>تاريخ الميلاد</th>
+          <th>البريد الإلكتروني</th>
+          <th>ساعة التسجيل</th>
+          <th>النشاط</th>
+          <th>إجراءات</th>
+        </tr>
+      </thead>
+      <tbody id="usersTableBody">
+        <!-- البيانات ستعرض هنا -->
+      </tbody>
+    </table>
+  </div>
+<div style="margin-bottom:15px; text-align:center;">
+  <button onclick="setPlaystationStatus(true)">فتح البلايستيشن</button>
+  <button onclick="setPlaystationStatus(false)">غلق البلايستيشن</button>
+</div>
+
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Cairo', sans-serif; background-color: #f0f2f5; padding: 30px; }
+        .grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        h2 { font-size: 16px; margin-bottom: 15px; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+        input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Cairo'; }
+        .btn { width: 100%; padding: 10px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-family: 'Cairo'; }
+        .btn-add { background: #2ecc71; color: white; }
+        .btn-delete { background: #e74c3c; color: white; padding: 3px 8px; border: none; border-radius: 3px; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: center; }
+        th, td { border: 1px solid #ddd; padding: 10px; }
+        th { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+
+<div class="grid">
+    <div class="card">
+        <h2>إضافة نشاط جديد</h2>
+        <form id="dashForm">
+            <div class="form-group"><label>اسم النشاط</label><input type="text" id="name" required></div>
+            <div class="form-group"><label>المجال</label><input type="text" id="field" required></div>
+            <div class="form-group"><label>عدد المستفيدين</label><input type="text" id="count" required></div>
+            <div class="form-group"><label>المرحلة السنية</label><input type="text" id="age" required></div>
+            <div class="form-group"><label>التاريخ</label><input type="text" id="date" required></div>
+            <button type="submit" class="btn btn-add">حفظ وإرسال للجدول</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>الأنشطة الحالية (التعديل والمراقبة)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>م</th><th>اسم النشاط</th><th>المجال</th><th>عدد المستفيدين</th><th>المرحلة السنية</th><th>التاريخ</th><th>حذف</th>
+                </tr>
+            </thead>
+            <tbody id="dashTableBody"></tbody>
+        </table>
+    </div>
+</div>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: #f8fafc; 
+            color: #334155;
+            padding: 20px; 
+        }
+        
+        .admin-header {
+            text-align: center;
+            margin-bottom: 25px;
+            background: #0f172a;
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        /* نظام التبويبات (Tabs) */
+        .tabs-menu {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Cairo';
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #0f172a;
+            color: white;
+            border-color: #0f172a;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* التنسيقات العامة الهيكلية */
+        .grid { 
+            display: grid; 
+            grid-template-columns: 380px 1fr; 
+            gap: 24px; 
+        }
+        
+        .card { 
+            background: white; 
+            padding: 24px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); 
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+        
+        h2 { 
+            font-size: 16px; 
+            margin-bottom: 20px; 
+            color: #0f172a; 
+            border-bottom: 2px solid #e2e8f0; 
+            padding-bottom: 8px; 
+            font-weight: 700;
+        }
+        
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #475569; }
+        input, select { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: 'Cairo'; font-size: 14px; color: #334155; }
+        input:focus, select:focus { border-color: #0f172a; outline: none; box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1); }
+        
+        .btn { padding: 12px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; font-family: 'Cairo'; font-size: 14px; width: 100%; }
+        .btn-add { background: #0f172a; color: white; }
+        .btn-add:hover { background: #1e293b; }
+        
+        .btn-delete { background: #ef4444; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-family: 'Cairo'; font-size: 12px; }
+        .btn-delete:hover { background: #dc2626; }
+        
+        .status-container { display: flex; gap: 15px; justify-content: center; margin-bottom: 20px; }
+        .status-btn { padding: 10px 20px; border: none; border-radius: 6px; font-family: 'Cairo'; font-weight: bold; cursor: pointer; color: white; }
+        .status-btn.on { background: #10b981; }
+        .status-btn.off { background: #ef4444; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: center; }
+        th, td { border-bottom: 1px solid #e2e8f0; padding: 12px; }
+        th { background: #f1f5f9; color: #475569; font-weight: 700; }
+        tr:hover td { background-color: #f8fafc; }
+        .no-data { color: #94a3b8; padding: 30px; }
+    </style>
+</head>
+<body>
+
+<div class="admin-header">
+    <h1>لوحة التحكم الإدارية المركزية</h1>
+    <p>إدارة الملعب، الأنشطة، والمستخدمين من مكان واحد</p>
+</div>
+
+<div class="tabs-menu">
+    <button class="tab-btn active" onclick="switchTab('stadium-tab')">🏟️ حجوزات الملعب</button>
+    <button class="tab-btn" onclick="switchTab('activities-tab')">📅 الأنشطة الشهرية</button>
+    <button class="tab-btn" onclick="switchTab('users-tab')">👥 حالة المركز والمستخدمين</button>
+</div>
+
+<div id="stadium-tab" class="tab-content active">
+    <div class="grid">
+        <div class="card">
+            <h2>تسجيل حجز ملعب جديد</h2>
+            <form id="bookingForm">
+                <div class="form-group"><label>اسم المستأجر</label><input type="text" id="book_name" required></div>
+                <div class="form-group"><label>رقم الهاتف</label><input type="text" id="book_phone" required></div>
+                <div class="form-group"><label>اليوم والتاريخ</label><input type="text" id="book_date" placeholder="مثال: الجمعة 6/19" required></div>
+                <div class="form-group"><label>الساعة (الوقت)</label><input type="text" id="book_time" placeholder="مثال: 7 - 8 مساءً" required></div>
+                <div class="form-group">
+                    <label>الفترة</label>
+                    <select id="book_period" onchange="updateBookingPrice()">
+                        <option value="نهار">صباحي (بالنهار) - 50ج</option>
+                        <option value="ليل">مسائي (بالليل) - 75ج</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>المبلغ (ج.م)</label><input type="text" id="book_price" value="50" readonly style="background:#f1f5f9; font-weight:bold;"></div>
+                <button type="submit" class="btn btn-add">تأكيد وحفظ الحجز 🔄</button>
+            </form>
+        </div>
+        <div class="card">
+            <h2>قائمة حجوزات الملعب الحالية</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr><th>م</th><th>الاسم</th><th>الهاتف</th><th>التاريخ</th><th>الوقت</th><th>الفترة</th><th>السعر</th><th>إجراء</th></tr>
+                    </thead>
+                    <tbody id="dashStadiumTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="activities-tab" class="tab-content">
+    <div class="grid">
+        <div class="card">
+            <h2>إضافة نشاط جديد</h2>
+            <form id="dashForm">
+                <div class="form-group"><label>اسم النشاط</label><input type="text" id="act_name" required></div>
+                <div class="form-group"><label>المجال</label><input type="text" id="act_field" required></div>
+                <div class="form-group"><label>عدد المستفيدين</label><input type="text" id="act_count" required></div>
+                <div class="form-group"><label>المرحلة السنية</label><input type="text" id="act_age" required></div>
+                <div class="form-group"><label>التاريخ</label><input type="text" id="act_date" required></div>
+                <button type="submit" class="btn btn-add">حفظ وإرسال للجدول</button>
+            </form>
+        </div>
+        <div class="card">
+            <h2>الأنشطة الحالية (التعديل والمراقبة)</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr><th>م</th><th>اسم النشاط</th><th>المجال</th><th>عدد المستفيدين</th><th>المرحلة السنية</th><th>التاريخ</th><th>حذف</th></tr>
+                    </thead>
+                    <tbody id="dashActivitiesTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="users-tab" class="tab-content">
+    <div class="card">
+        <h2>🎛️ أزرار التحكم في حالة الخدمات بالفروع</h2>
+        <div style="display: flex; gap: 40px; justify-content: center; margin-bottom: 20px;">
+            <div>
+                <p style="text-align: center; font-weight: bold; margin-bottom: 8px;">حالة المركز العام</p>
+                <div class="status-container">
+                    <button class="status-btn on" onclick="setCenterStatus(true)">فتح المركز</button>
+                    <button class="status-btn off" onclick="setCenterStatus(false)">غلق المركز</button>
+                </div>
+            </div>
+            <div>
+                <p style="text-align: center; font-weight: bold; margin-bottom: 8px;">غرفة البلايستيشن</p>
+                <div class="status-container">
+                    <button class="status-btn on" onclick="setPlaystationStatus(true)">فتح البلايستيشن</button>
+                    <button class="status-btn off" onclick="setPlaystationStatus(false)">غلق البلايستيشن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>👥 بيانات الأعضاء والمستخدمين المسجلين حالياً</h2>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr><th>اسم المستخدم</th><th>العنوان</th><th>تاريخ الميلاد</th><th>البريد الإلكتروني</th><th>ساعة التسجيل</th><th>إجراءات</th></tr>
+                </thead>
+                <tbody id="usersTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // نظام التنقل بين التبويبات
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    // ==================== 1. إدارة حجوزات الملعب ====================
+    let bookings = JSON.parse(localStorage.getItem('stadium_bookings')) || [];
+    const stadiumChannel = new BroadcastChannel('stadium_channel');
+
+    function updateBookingPrice() {
+        const period = document.getElementById("book_period").value;
+        document.getElementById("book_price").value = (period === "نهار") ? "50" : "75";
+    }
+
+    function saveAndRenderStadium() {
+        localStorage.setItem('stadium_bookings', JSON.stringify(bookings));
+        stadiumStadiumSync();
+
+        const tbody = document.getElementById("dashStadiumTableBody");
+        tbody.innerHTML = "";
+        
+        if (bookings.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="8" class="no-data">لا توجد حجوزات مسجلة للملعب.</td></tr>`;
+            return;
+        }
+
+        bookings.forEach((item, index) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td style="font-weight:600">${item.name}</td>
+                    <td>${item.phone}</td>
+                    <td>${item.date}</td>
+                    <td>${item.time}</td>
+                    <td>${item.period === 'نهار' ? 'نهاراً' : 'ليلاً'}</td>
+                    <td style="font-weight:700; color:#16a34a">${item.price}ج</td>
+                    <td><button class="btn-delete" onclick="deleteBookingItem(${index})">إلغاء</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    function stadiumStadiumSync() {
+        stadiumChannel.postMessage({ type: 'REFRESH_BOOKINGS', payload: bookings });
+    }
+
+    document.getElementById("bookingForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        bookings.push({
+            name: document.getElementById("book_name").value,
+            phone: document.getElementById("book_phone").value,
+            date: document.getElementById("book_date").value,
+            time: document.getElementById("book_time").value,
+            period: document.getElementById("book_period").value,
+            price: document.getElementById("book_price").value
+        });
+        saveAndRenderStadium();
+        this.reset();
+        updateBookingPrice();
+    });
+
+    window.deleteBookingItem = function(index) {
+        if(confirm("هل تريد إلغاء حجز هذا الملعب؟")) {
+            bookings.splice(index, 1);
+            saveAndRenderStadium();
+        }
+    }
+
+
+    // ==================== 2. إدارة الأنشطة الشهـرية ====================
+    if (typeof activities === 'undefined') {
+        var activities = JSON.parse(localStorage.getItem('my_activities')) || [];
+    }
+
+    function saveAndRenderActivities() {
+        localStorage.setItem('my_activities', JSON.stringify(activities));
+        const tbody = document.getElementById("dashActivitiesTableBody");
+        tbody.innerHTML = "";
+        
+        if (activities.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="no-data">لا توجد أنشطة شهرية مسجلة حالياً.</td></tr>`;
+            return;
+        }
+
+        activities.forEach((item, index) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td style="font-weight:600">${item.name}</td>
+                    <td>${item.field}</td>
+                    <td>${item.count}</td>
+                    <td>${item.age}</td>
+                    <td>${item.date}</td>
+                    <td><button class="btn-delete" onclick="deleteActivityItem(${index})">حذف</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    document.getElementById("dashForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        activities.push({
+            name: document.getElementById("act_name").value,
+            field: document.getElementById("act_field").value,
+            count: document.getElementById("act_count").value,
+            age: document.getElementById("act_age").value,
+            date: document.getElementById("act_date").value
+        });
+        saveAndRenderActivities();
+        this.reset();
+    });
+
+    window.deleteActivityItem = function(index) {
+        if(confirm("هل تريد حذف هذا النشاط؟")) {
+            activities.splice(index, 1);
+            saveAndRenderActivities();
+        }
+    }
+
+
+    // ==================== 3. إدارة المستخدمين وتحديثات الحالات ====================
+    function setCenterStatus(isOpen) {
+        localStorage.setItem("centerStatus", isOpen ? "open" : "closed");
+        alert(isOpen ? "تم إرسال إشارة: فتح المركز العام 🟢" : "تم إرسال إشارة: غلق المركز العام 🔴");
+    }
+
+    function setPlaystationStatus(isAvailable) {
+        localStorage.setItem("playstationStatus", isAvailable ? "available" : "unavailable");
+        alert(isAvailable ? "تم إرسال إشارة: فتح غرفة البلايستيشن 🎮" : "تم إرسال إشارة: غلق غرفة البلايستيشن 🚫");
+    }
+
+    function loadUsers() {
+        const tableBody = document.getElementById('usersTableBody');
+        const usersList = JSON.parse(localStorage.getItem('allUsers')) || [];
+
+        if (usersList.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="6" class="no-data">لا توجد بيانات مستخدمين مسجلة حتى الآن.</td></tr>`;
+            return;
+        }
+
+        tableBody.innerHTML = usersList.map(user => `
+            <tr>
+                <td style="font-weight:600">${user.username}</td>
+                <td>${user.address}</td>
+                <td>${user.birthdate}</td>
+                <td>${user.email}</td>
+                <td>${user.loginTime ? user.loginTime : "غير متوفر"}</td>
+                <td><button class="btn-delete" onclick="deleteUser(${user.id})">حذف الحساب</button></td>
+            </tr>
+        `).join('');
+    }
+
+    window.deleteUser = function(userId) {
+        if(confirm("هل أنت متأكد من حذف هذا المستخدم نهائياً؟")) {
+            let usersList = JSON.parse(localStorage.getItem('allUsers')) || [];
+            usersList = usersList.filter(user => user.id !== userId);
+            localStorage.setItem('allUsers', JSON.stringify(usersList));
+            loadUsers();
+        }
+    }
+
+    // التشغيل الأولي واستقبال تحديثات الـ Storage
+    window.onload = function() {
+        saveAndRenderStadium();
+        saveAndRenderActivities();
+        loadUsers();
+    };
+
+    window.addEventListener("storage", function(e) {
+        if (e.key === "allUsers") {
+            loadUsers();
+        }
+    });
+
+</script>
+
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #334155; padding: 20px; }
+        .admin-header { text-align: center; margin-bottom: 25px; background: #0f172a; color: white; padding: 20px; border-radius: 12px; }
+        .tabs-menu { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .tab-btn { padding: 10px 20px; border: 1px solid #cbd5e1; background: white; border-radius: 6px; cursor: pointer; font-family: 'Cairo'; font-weight: 600; font-size: 14px; }
+        .tab-btn.active { background: #0f172a; color: white; border-color: #0f172a; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .grid { display: grid; grid-template-columns: 380px 1fr; gap: 24px; }
+        .card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; margin-bottom: 20px; }
+        h2 { font-size: 16px; margin-bottom: 20px; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; font-weight: 700; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #475569; }
+        input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: 'Cairo'; font-size: 14px; color: #334155; }
+        textarea { resize: vertical; height: 100px; }
+        .btn { padding: 12px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; font-family: 'Cairo'; font-size: 14px; width: 100%; }
+        .btn-add { background: #0f172a; color: white; }
+        .btn-delete { background: #ef4444; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-family: 'Cairo'; font-size: 12px; }
+        .status-container { display: flex; gap: 15px; justify-content: center; margin-bottom: 20px; }
+        .status-btn { padding: 10px 20px; border: none; border-radius: 6px; font-family: 'Cairo'; font-weight: bold; cursor: pointer; color: white; }
+        .status-btn.on { background: #10b981; }
+        .status-btn.off { background: #ef4444; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: center; }
+        th, td { border-bottom: 1px solid #e2e8f0; padding: 12px; }
+        th { background: #f1f5f9; color: #475569; font-weight: 700; }
+        .no-data { color: #94a3b8; padding: 30px; }
+    </style>
+</head>
+<body>
+
+<div class="admin-header">
+    <h1>لوحة التحكم الإدارية المركزية</h1>
+    <p>إدارة الرسائل الجماعية، الأنشطة، والمستخدمين</p>
+</div>
+
+<div class="tabs-menu">
+    <button class="tab-btn active" onclick="switchTab('msg-tab')">📢 الرسائل الجماعية</button>
+    <button class="tab-btn" onclick="switchTab('activities-tab')">📅 الأنشطة الشهرية</button>
+    <button class="tab-btn" onclick="switchTab('users-tab')">👥 حالة المركز والمستخدمين</button>
+</div>
+
+<div id="msg-tab" class="tab-content active">
+    <div class="grid">
+        <div class="card">
+            <h2>إرسال تنويه جماعي جديد للجمهور</h2>
+            <form id="msgForm">
+                <div class="form-group"><label>عنوان التنويه</label><input type="text" id="msg_title" placeholder="مثال: مواعيد العمل في العيد" required></div>
+                <div class="form-group"><label>التاريخ</label><input type="text" id="msg_date" placeholder="مثال: الجمعة 2026/6/19" required></div>
+                <div class="form-group"><label>نص الرسالة بالكامل</label><textarea id="msg_content" placeholder="اكتب تفاصيل الإعلان هنا للجمهور..." required></textarea></div>
+                <button type="submit" class="btn btn-add">نشر وإرسال فوري للشاشة 📢</button>
+            </form>
+        </div>
+        <div class="card">
+            <h2>الرسائل المنشورة حالياً</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr><th>م</th><th>العنوان</th><th>التاريخ</th><th>مضمون الرسالة</th><th>إجراء</th></tr>
+                    </thead>
+                    <tbody id="dashMsgTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="activities-tab" class="tab-content">
+    <div class="grid">
+        <div class="card">
+            <h2>إضافة نشاط جديد</h2>
+            <form id="dashForm">
+                <div class="form-group"><label>اسم النشاط</label><input type="text" id="act_name" required></div>
+                <div class="form-group"><label>المجال</label><input type="text" id="act_field" required></div>
+                <div class="form-group"><label>عدد المستفيدين</label><input type="text" id="act_count" required></div>
+                <div class="form-group"><label>المرحلة السنية</label><input type="text" id="act_age" required></div>
+                <div class="form-group"><label>التاريخ</label><input type="text" id="act_date" required></div>
+                <button type="submit" class="btn btn-add">حفظ وإرسال للجدول</button>
+            </form>
+        </div>
+        <div class="card">
+            <h2>الأنشطة الحالية (التعديل والمراقبة)</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr><th>م</th><th>اسم النشاط</th><th>المجال</th><th>عدد المستفيدين</th><th>المرحلة السنية</th><th>التاريخ</th><th>حذف</th></tr>
+                    </thead>
+                    <tbody id="dashActivitiesTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="users-tab" class="tab-content">
+    <div class="card">
+        <h2>🎛️ أزرار التحكم في حالة الخدمات بالفروع</h2>
+        <div style="display: flex; gap: 40px; justify-content: center; margin-bottom: 20px;">
+            <div>
+                <p style="text-align: center; font-weight: bold; margin-bottom: 8px;">حالة المركز العام</p>
+                <div class="status-container">
+                    <button class="status-btn on" onclick="setCenterStatus(true)">فتح المركز</button>
+                    <button class="status-btn off" onclick="setCenterStatus(false)">غلق المركز</button>
+                </div>
+            </div>
+            <div>
+                <p style="text-align: center; font-weight: bold; margin-bottom: 8px;">غرفة البلايستيشن</p>
+                <div class="status-container">
+                    <button class="status-btn on" onclick="setPlaystationStatus(true)">فتح البلايستيشن</button>
+                    <button class="status-btn off" onclick="setPlaystationStatus(false)">غلق البلايستيشن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>👥 بيانات الأعضاء والمستخدمين المسجلين حالياً</h2>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr><th>اسم المستخدم</th><th>العنوان</th><th>تاريخ الميلاد</th><th>البريد الإلكتروني</th><th>ساعة التسجيل</th><th>إجراءات</th></tr>
+                </thead>
+                <tbody id="usersTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    // ==================== 1. إدارة الرسائل الجماعية ====================
+    let messages = JSON.parse(localStorage.getItem('center_messages')) || [];
+    const msgChannel = new BroadcastChannel('center_announcements_channel');
+
+    function saveAndRenderMessages() {
+        localStorage.setItem('center_messages', JSON.stringify(messages));
+        msgChannel.postMessage({ type: 'REFRESH_MESSAGES', payload: messages });
+
+        const tbody = document.getElementById("dashMsgTableBody");
+        tbody.innerHTML = "";
+        
+        if (messages.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="no-data">لا توجد رسائل منشورة حالياً.</td></tr>`;
+            return;
+        }
+
+        messages.forEach((item, index) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td style="font-weight:600">${item.title}</td>
+                    <td>${item.date}</td>
+                    <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.content}</td>
+                    <td><button class="btn-delete" onclick="deleteMsgItem(${index})">حذف الإعلان</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    document.getElementById("msgForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        messages.push({
+            title: document.getElementById("msg_title").value,
+            date: document.getElementById("msg_date").value,
+            content: document.getElementById("msg_content").value
+        });
+        saveAndRenderMessages();
+        this.reset();
+    });
+
+    window.deleteMsgItem = function(index) {
+        if(confirm("هل تريد حذف هذا الإعلان نهائياً من شاشة العرض؟")) {
+            messages.splice(index, 1);
+            saveAndRenderMessages();
+        }
+    }
+
+    // ==================== 2. إدارة الأنشطة الشهـرية ====================
+    let activities = JSON.parse(localStorage.getItem('my_activities')) || [];
+
+    function saveAndRenderActivities() {
+        localStorage.setItem('my_activities', JSON.stringify(activities));
+        const tbody = document.getElementById("dashActivitiesTableBody");
+        tbody.innerHTML = "";
+        
+        if (activities.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="no-data">لا توجد أنشطة شهرية مسجلة حالياً.</td></tr>`;
+            return;
+        }
+
+        activities.forEach((item, index) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td style="font-weight:600">${item.name}</td>
+                    <td>${item.field}</td>
+                    <td>${item.count}</td>
+                    <td>${item.age}</td>
+                    <td>${item.date}</td>
+                    <td><button class="btn-delete" onclick="deleteActivityItem(${index})">حذف</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    document.getElementById("dashForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        activities.push({
+            name: document.getElementById("act_name").value,
+            field: document.getElementById("act_field").value,
+            count: document.getElementById("act_count").value,
+            age: document.getElementById("act_age").value,
+            date: document.getElementById("act_date").value
+        });
+        saveAndRenderActivities();
+        this.reset();
+    });
+
+    window.deleteActivityItem = function(index) {
+        if(confirm("هل تريد حذف هذا النشاط؟")) {
+            activities.splice(index, 1);
+            saveAndRenderActivities();
+        }
+    }
+
+    // ==================== 3. التحكم والمستخدمين ====================
+    function setCenterStatus(isOpen) {
+        localStorage.setItem("centerStatus", isOpen ? "open" : "closed");
+        alert(isOpen ? "تم إرسال إشارة: فتح المركز العام 🟢" : "تم إرسال إشارة: غلق المركز العام 🔴");
+    }
+
+    function setPlaystationStatus(isAvailable) {
+        localStorage.setItem("playstationStatus", isAvailable ? "available" : "unavailable");
+        alert(isAvailable ? "تم إرسال إشارة: فتح غرفه البلايستيشن 🎮" : "تم إرسال إشارة: غلق غرفة البلايستيشن 🚫");
+    }
+
+    function loadUsers() {
+        const tableBody = document.getElementById('usersTableBody');
+        const usersList = JSON.parse(localStorage.getItem('allUsers')) || [];
+
+        if (usersList.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="6" class="no-data">لا توجد بيانات مستخدمين مسجلة حتى الآن.</td></tr>`;
+            return;
+        }
+
+        tableBody.innerHTML = usersList.map(user => `
+            <tr>
+                <td style="font-weight:600">${user.username}</td>
+                <td>${user.address}</td>
+                <td>${user.birthdate}</td>
+                <td>${user.email}</td>
+                <td>${user.loginTime ? user.loginTime : "غير متوفر"}</td>
+                <td><button class="btn-delete" onclick="deleteUser(${user.id})">حذف الحساب</button></td>
+            </tr>
+        `).join('');
+    }
+
+    window.deleteUser = function(userId) {
+        if(confirm("هل أنت متأكد من حذف هذا المستخدم نهائياً؟")) {
+            let usersList = JSON.parse(localStorage.getItem('allUsers')) || [];
+            usersList = usersList.filter(user => user.id !== userId);
+            localStorage.setItem('allUsers', JSON.stringify(usersList));
+            loadUsers();
+        }
+    }
+
+    window.onload = function() {
+        saveAndRenderMessages();
+        saveAndRenderActivities();
+        loadUsers();
+    };
+
+    window.addEventListener("storage", function(e) {
+        if (e.key === "allUsers") {
+            loadUsers();
+        }
+    });
+</script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: #f8fafc; 
+            color: #334155;
+            padding: 20px; 
+        }
+        
+        .admin-header { 
+            text-align: center; 
+            margin-bottom: 25px; 
+            background: #0f172a; 
+            color: white; 
+            padding: 20px; 
+            border-radius: 12px; 
+        }
+        
+        .tabs-menu { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+            justify-content: center; 
+        }
+        
+        .tab-btn { 
+            padding: 10px 20px; 
+            border: 1px solid #cbd5e1; 
+            background: white; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-family: 'Cairo'; 
+            font-weight: 600; 
+            font-size: 14px; 
+            transition: all 0.2s;
+        }
+        
+        .tab-btn.active { 
+            background: #0f172a; 
+            color: white; 
+            border-color: #0f172a; 
+        }
+        
+        .tab-content { 
+            display: none; 
+        }
+        
+        .tab-content.active { 
+            display: block; 
+        }
+        
+        .grid { 
+            display: grid; 
+            grid-template-columns: 380px 1fr; 
+            gap: 24px; 
+        }
+        
+        .card { 
+            background: white; 
+            padding: 24px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); 
+            border: 1px solid #e2e8f0; 
+            margin-bottom: 20px; 
+        }
+        
+        h2 { 
+            font-size: 16px; 
+            margin-bottom: 20px; 
+            color: #0f172a; 
+            border-bottom: 2px solid #e2e8f0; 
+            padding-bottom: 8px; 
+            font-weight: 700; 
+        }
+        
+        .form-group { 
+            margin-bottom: 16px; 
+        }
+        
+        label { 
+            display: block; 
+            font-size: 13px; 
+            font-weight: 600; 
+            margin-bottom: 6px; 
+            color: #475569; 
+        }
+        
+        input, select, textarea { 
+            width: 100%; 
+            padding: 10px 12px; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 6px; 
+            font-family: 'Cairo'; 
+            font-size: 14px; 
+            color: #334155; 
+        }
+        
+        textarea { 
+            resize: vertical; 
+            height: 100px; 
+        }
+        
+        .btn { 
+            padding: 12px; 
+            border: none; 
+            border-radius: 6px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            font-family: 'Cairo'; 
+            font-size: 14px; 
+            width: 100%; 
+        }
+        
+        .btn-add { 
+            background: #0f172a; 
+            color: white; 
+        }
+        
+        .btn-add:hover { 
+            background: #1e293b; 
+        }
+        
+        .btn-delete { 
+            background: #ef4444; 
+            color: white; 
+            padding: 5px 10px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-family: 'Cairo'; 
+            font-size: 12px; 
+        }
+        
+        .status-container { 
+            display: flex; 
+            gap: 15px; 
+            justify-content: center; 
+            margin-bottom: 20px; 
+        }
+        
+        .status-btn { 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 6px; 
+            font-family: 'Cairo'; 
+            font-weight: bold; 
+            cursor: pointer; 
+            color: white; 
+        }
+        
+        .status-btn.on { background: #10b981; }
+        .status-btn.off { background: #ef4444; }
+        
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-size: 14px; 
+            text-align: center; 
+        }
+        
+        th, td { 
+            border-bottom: 1px solid #e2e8f0; 
+            padding: 12px; 
+        }
+        
+        th { 
+            background: #f1f5f9; 
+            color: #475569; 
+            font-weight: 700; 
+        }
+        
+        .no-data { 
+            color: #94a3b8; 
+            padding: 30px; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="admin-header">
+    <h1>لوحة التحكم الإدارية المركزية</h1>
+    <p>إدارة الرسائل الجماعية، الأنشطة، والمستخدمين</p>
+</div>
+
+<div class="tabs-menu">
+    <button class="tab-btn active" onclick="switchTab('msg-tab')">📢 الرسائل الجماعية</button>
+    <button class="tab-btn" onclick="switchTab('activities-tab')">📅 الأنشطة الشهرية</button>
+    <button class="tab-btn" onclick="switchTab('users-tab')">👥 حالة المركز والمستخدمين</button>
+</div>
+
+<div id="msg-tab" class="tab-content active">
+    <div class="grid">
+        <div class="card">
+            <h2>إرسال تنويه جماعي جديد للجمهور</h2>
+            <form id="msgForm">
+                <div class="form-group">
+                    <label>عنوان التنويه</label>
+                    <input type="text" id="msg_title" placeholder="مثال: مواعيد العمل في العيد" required>
+                </div>
+                <div class="form-group">
+                    <label>التاريخ</label>
+                    <input type="text" id="msg_date" placeholder="مثال: الجمعة 2026/6/19" required>
+                </div>
+                <div class="form-group">
+                    <label>نص الرسالة بالكامل</label>
+                    <textarea id="msg_content" placeholder="اكتب تفاصيل الإعلان هنا للجمهور..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-add">نشر وإرسال فوري للشاشة 📢</button>
+            </form>
+        </div>
+        <div class="card">
+            <h2>الرسائل المنشورة حالياً</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>م</th>
+                            <th>العنوان</th>
+                            <th>التاريخ</th>
+                            <th>مضمون الرسالة</th>
+                            <th>إجراء</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashMsgTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="activities-tab" class="tab-content">
+    <div class="grid">
+        <div class="card">
+            <h2>إضافة نشاط جديد</h2>
+            <form id="dashForm">
+                <div class="form-group"><label>اسم النشاط</label><input type="text" id="act_name" required></div>
+                <div class="form-group"><label>المجال</label><input type="text" id="act_field" required></div>
+                <div class="form-group"><label>عدد المستفيدين</label><input type="text" id="act_count" required></div>
+                <div class="form-group"><label>المرحلة السنية</label><input type="text" id="act_age" required></div>
+                <div class="form-group"><label>التاريخ</label><input type="text" id="act_date" required></div>
+                <button type="submit" class="btn btn-add">حفظ وإرسال للجدول</button>
+            </form>
+        </div>
+        <div class="card">
+            <h2>الأنشطة الحالية (التعديل والمراقبة)</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr><th>م</th><th>اسم النشاط</th><th>المجال</th><th>عدد المستفيدين</th><th>المرحلة السنية</th><th>التاريخ</th><th>حذف</th></tr>
+                    </thead>
+                    <tbody id="dashActivitiesTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="users-tab" class="tab-content">
+    <div class="card">
+        <h2>🎛️ أزرار التحكم في حالة الخدمات بالفروع</h2>
+        <div style="display: flex; gap: 40px; justify-content: center; margin-bottom: 20px;">
+            <div>
+                <p style="text-align: center; font-weight: bold; margin-bottom: 8px;">حالة المركز العام</p>
+                <div class="status-container">
+                    <button class="status-btn on" onclick="setCenterStatus(true)">فتح المركز</button>
+                    <button class="status-btn off" onclick="setCenterStatus(false)">غلق المركز</button>
+                </div>
+            </div>
+            <div>
+                <p style="text-align: center; font-weight: bold; margin-bottom: 8px;">غرفة البلايستيشن</p>
+                <div class="status-container">
+                    <button class="status-btn on" onclick="setPlaystationStatus(true)">فتح البلايستيشن</button>
+                    <button class="status-btn off" onclick="setPlaystationStatus(false)">غلق البلايستيشن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>👥 بيانات الأعضاء والمستخدمين المسجلين حالياً</h2>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr><th>اسم المستخدم</th><th>العنوان</th><th>تاريخ الميلاد</th><th>البريد الإلكتروني</th><th>ساعة التسجيل</th><th>إجراءات</th></tr>
+                </thead>
+                <tbody id="usersTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // نظام التنقل بين التبويبات
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    // ==================== 1. إدارة الرسائل الجماعية ====================
+    let messages = JSON.parse(localStorage.getItem('center_messages')) || [];
+    const msgChannel = new BroadcastChannel('center_announcements_channel');
+
+    function saveAndRenderMessages() {
+        localStorage.setItem('center_messages', JSON.stringify(messages));
+        msgChannel.postMessage({ type: 'REFRESH_MESSAGES', payload: messages });
+
+        const tbody = document.getElementById("dashMsgTableBody");
+        tbody.innerHTML = "";
+        
+        if (messages.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="no-data">لا توجد رسائل منشورة حالياً.</td></tr>`;
+            return;
+        }
+
+        messages.forEach((item, index) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td style="font-weight:600">${item.title}</td>
+                    <td>${item.date}</td>
+                    <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.content}</td>
+                    <td><button class="btn-delete" onclick="deleteMsgItem(${index})">حذف الإعلان</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    document.getElementById("msgForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        messages.push({
+            title: document.getElementById("msg_title").value,
+            date: document.getElementById("msg_date").value,
+            content: document.getElementById("msg_content").value
+        });
+        saveAndRenderMessages();
+        this.reset();
+    });
+
+    window.deleteMsgItem = function(index) {
+        if(confirm("هل تريد حذف هذا الإعلان نهائياً من شاشة العرض؟")) {
+            messages.splice(index, 1);
+            saveAndRenderMessages();
+        }
+    }
+
+    // ==================== 2. إدارة الأنشطة الشهـرية ====================
+    let activities = JSON.parse(localStorage.getItem('my_activities')) || [];
+
+    function saveAndRenderActivities() {
+        localStorage.setItem('my_activities', JSON.stringify(activities));
+        const tbody = document.getElementById("dashActivitiesTableBody");
+        tbody.innerHTML = "";
+        
+        if (activities.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="no-data">لا توجد أنشطة شهرية مسجلة حالياً.</td></tr>`;
+            return;
+        }
+
+        activities.forEach((item, index) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td style="font-weight:600">${item.name}</td>
+                    <td>${item.field}</td>
+                    <td>${item.count}</td>
+                    <td>${item.age}</td>
+                    <td>${item.date}</td>
+                    <td><button class="btn-delete" onclick="deleteActivityItem(${index})">حذف</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    document.getElementById("dashForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        activities.push({
+            name: document.getElementById("act_name").value,
+            field: document.getElementById("act_field").value,
+            count: document.getElementById("act_count").value,
+            age: document.getElementById("act_age").value,
+            date: document.getElementById("act_date").value
+        });
+        saveAndRenderActivities();
+        this.reset();
+    });
+
+    window.deleteActivityItem = function(index) {
+        if(confirm("هل تريد حذف هذا النشاط؟")) {
+            activities.splice(index, 1);
+            saveAndRenderActivities();
+        }
+    }
+
+    // ==================== 3. التحكم والمستخدمين ====================
+    function setCenterStatus(isOpen) {
+        localStorage.setItem("centerStatus", isOpen ? "open" : "closed");
+        alert(isOpen ? "تم إرسال إشارة: فتح المركز العام 🟢" : "تم إرسال إشارة: غلق المركز العام 🔴");
+    }
+
+    function setPlaystationStatus(isAvailable) {
+        localStorage.setItem("playstationStatus", isAvailable ? "available" : "unavailable");
+        alert(isAvailable ? "تم إرسال إشارة: فتح غرفة البلايستيشن 🎮" : "تم إرسال إشارة: غلق غرفة البلايستيشن 🚫");
+    }
+
+    function loadUsers() {
+        const tableBody = document.getElementById('usersTableBody');
+        const usersList = JSON.parse(localStorage.getItem('allUsers')) || [];
+
+        if (usersList.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="6" class="no-data">لا توجد بيانات مستخدمين مسجلة حتى الآن.</td></tr>`;
+            return;
+        }
+
+        tableBody.innerHTML = usersList.map(user => `
+            <tr>
+                <td style="font-weight:600">${user.username}</td>
+                <td>${user.address}</td>
+                <td>${user.birthdate}</td>
+                <td>${user.email}</td>
+                <td>${user.loginTime ? user.loginTime : "غير متوفر"}</td>
+                <td><button class="btn-delete" onclick="deleteUser(${user.id})">حذف الحساب</button></td>
+            </tr>
+        `).join('');
+    }
+
+    window.deleteUser = function(userId) {
+        if(confirm("هل أنت متأكد من حذف هذا المستخدم نهائياً؟")) {
+            let usersList = JSON.parse(localStorage.getItem('allUsers')) || [];
+            usersList = usersList.filter(user => user.id !== userId);
+            localStorage.setItem('allUsers', JSON.stringify(usersList));
+            loadUsers();
+        }
+    }
+
+    // التشغيل الأولي
+    window.onload = function() {
+        saveAndRenderMessages();
+        saveAndRenderActivities();
+        loadUsers();
+    };
+
+    window.addEventListener("storage", function(e) {
+        if (e.key === "allUsers") {
+            loadUsers();
+        }
+    });
+</script>
+<script>
+    function loadUsers() {
+      const tableBody = document.getElementById('usersTableBody');
+      const usersList = JSON.parse(localStorage.getItem('allUsers')) || [];
+      const centerStatus = localStorage.getItem("centerStatus") || "closed";
+
+      if (usersList.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="7" class="no-data">لا توجد بيانات مسجلة حتى الآن.</td></tr>`;
+        return;
+      }
+
+      tableBody.innerHTML = usersList.map(user => `
+        <tr>
+          <td>${user.username}</td>
+          <td>${user.address}</td>
+          <td>${user.birthdate}</td>
+          <td>${user.email}</td>
+          <td>${user.loginTime ? user.loginTime : "غير متوفر"}</td>
+         
+          <td><button class="delete-btn" onclick="deleteUser(${user.id})">حذف</button></td>
+        </tr>
+      `).join('');
+    }
+
+    function deleteUser(userId) {
+      let usersList = JSON.parse(localStorage.getItem('allUsers')) || [];
+      usersList = usersList.filter(user => user.id !== userId);
+      localStorage.setItem('allUsers', JSON.stringify(usersList));
+      loadUsers();
+    }
+
+    function setCenterStatus(isOpen) {
+      localStorage.setItem("centerStatus", isOpen ? "open" : "closed");
+      loadUsers();
+    }
+
+    window.onload = loadUsers;
+    setInterval(loadUsers, 5000);
+
+    window.addEventListener("storage", function(e) {
+      if (e.key === "allUsers" || e.key === "centerStatus") {
+        loadUsers();
+      }
+    });
+ function setCenterStatus(isOpen) {
+  // نخزن الحالة في localStorage
+  localStorage.setItem("centerStatus", isOpen ? "open" : "closed");
+}
+
+ </script>
+</body>
+</html>

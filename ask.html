@@ -48,8 +48,24 @@
     </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
 <script>
-    const channel = new BroadcastChannel('stadium_channel');
+    // ⚙️ إعدادات مشروعك الحقيقي Marcaz Shabab
+    const firebaseConfig = {
+        apiKey: "AIzaSyBpDxW-UlQSFqYfnUCTSb4acEe7pp8dV_c",
+        authDomain: "marcazshabab.firebaseapp.com",
+        databaseURL: "https://marcazshabab-default-rtdb.firebaseio.com",
+        projectId: "marcazshabab",
+        storageBucket: "marcazshabab.firebasestorage.app",
+        messagingSenderId: "403954625189",
+        appId: "1:403954625189:web:b49405402e5fcdf1723b4c"
+    };
+
+    // تشغيل السيرفر
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
     function displayData(bookings) {
         const tbody = document.getElementById("viewTableBody");
@@ -69,7 +85,7 @@
                 <tr>
                     <td style="font-weight: 700; color: #64748b;">${index + 1}</td>
                     <td style="font-weight: 600; color: #0f172a;">${item.name}</td>
-                    <td>${item.phone}</td>
+                    <td>${item.phone || 'غير متوفر'}</td>
                     <td>${item.date}</td>
                     <td>${item.time}</td>
                     <td>${periodBadge}</td>
@@ -79,14 +95,11 @@
         });
     }
 
-    channel.onmessage = function(event) {
-        if (event.data && event.data.type === 'REFRESH_BOOKINGS') {
-            displayData(event.data.payload);
-        }
-    };
-
-    const localData = JSON.parse(localStorage.getItem('stadium_bookings')) || [];
-    displayData(localData);
+    // 🌟 جلب حجوزات الملعب لحظياً من السيرفر السحابي
+    database.ref('stadium_bookings').on('value', (snapshot) => {
+        const liveBookings = snapshot.val() || [];
+        displayData(liveBookings);
+    });
 </script>
 </body>
 </html>

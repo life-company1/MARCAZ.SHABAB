@@ -102,18 +102,34 @@
                 <th>التاريخ</th>
             </tr>
         </thead>
-        <tbody id="viewTableBody">
-            </tbody>
+        <tbody id="viewTableBody"></tbody>
     </table>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
 <script>
-    function loadTableData() {
-        const activities = JSON.parse(localStorage.getItem('my_activities')) || [];
+    // ⚙️ إعدادات مشروعك الحقيقي Marcaz Shabab
+    const firebaseConfig = {
+        apiKey: "AIzaSyBpDxW-UlQSFqYfnUCTSb4acEe7pp8dV_c",
+        authDomain: "marcazshabab.firebaseapp.com",
+        databaseURL: "https://marcazshabab-default-rtdb.firebaseio.com",
+        projectId: "marcazshabab",
+        storageBucket: "marcazshabab.firebasestorage.app",
+        messagingSenderId: "403954625189",
+        appId: "1:403954625189:web:b49405402e5fcdf1723b4c"
+    };
+
+    // تشغيل السيرفر
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    function displayActivities(activities) {
         const tbody = document.getElementById("viewTableBody");
         tbody.innerHTML = "";
 
-        if (activities.length === 0) {
+        if (!activities || activities.length === 0) {
             tbody.innerHTML = `<tr><td colspan="6" class="empty-msg">لا توجد بيانات متاحة حالياً.. قم بإضافة أنشطة من لوحة التحكم</td></tr>`;
             return;
         }
@@ -133,11 +149,11 @@
         });
     }
 
-    // تحميل وعرض البيانات فور فتح الصفحة
-    loadTableData();
-
-    // تحديث فوري إذا تم التغيير من تابة الداشبورد المفتوحة بجانبها
-    window.addEventListener('storage', loadTableData);
+    // 🌟 جلب جدول الأنشطة الشهرية لحظياً من الإنترنت (Firebase) أول ما تتغير في الداشبورد
+    database.ref('my_activities').on('value', (snapshot) => {
+        const liveActivities = snapshot.val() || [];
+        displayActivities(liveActivities);
+    });
 </script>
 </body>
 </html>

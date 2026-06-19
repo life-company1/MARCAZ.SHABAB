@@ -8,10 +8,8 @@
      <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-    
     />
     <title> sign in </title>
-
 </head>
 <body>
     
@@ -113,7 +111,7 @@
           cursor: pointer;
           transition: background-color 0.3s ease;
           margin-top: 10px;
-      }
+        }
 
       .submit-btn:hover {
           background-color: #000000;
@@ -150,35 +148,6 @@
           transform: translateY(-2px);
       }
 
-      /* --- 4. مؤشرات الحالة والأنيميشن --- */
-      .status-indicator {
-          font-weight: bold;
-          font-size: 20px;
-          text-align: center;
-          padding: 10px;
-          margin-top: 15px;
-      }
-
-      .status-indicator.open .text {
-          color: #2ecc71;
-          animation: glowOpen 2s infinite alternate;
-      }
-
-      .status-indicator.closed .text {
-          color: #e74c3c;
-          animation: glowClosed 2s infinite alternate;
-      }
-
-      @keyframes glowOpen {
-          from { text-shadow: 0 0 5px #2ecc71, 0 0 10px #2ecc71; }
-          to   { text-shadow: 0 0 20px #2ecc71, 0 0 40px #2ecc71; }
-      }
-
-      @keyframes glowClosed {
-          from { text-shadow: 0 0 5px #e74c3c, 0 0 10px #e74c3c; }
-          to   { text-shadow: 0 0 20px #e74c3c, 0 0 40px #e74c3c; }
-      }
-
       /* --- 5. شاشات الميديا (Responsive) --- */
       @media (max-width: 500px) {
           .form-container {
@@ -192,45 +161,56 @@
           }
       }
     </style>
+
 <div class="form-container">
   <form id="userDataForm">
     <h2>إنشاء حساب جديد</h2>
     
-    <!-- حقل اسم المستخدم -->
     <div class="form-group">
       <label for="username">اسم المستخدم (Username):</label>
-      <input type="text" id="username" placeholder="أدخل اسمك بالكامل">
+      <input type="text" id="username" placeholder="أدخل اسمك بالكامل" required>
     </div>
 
-    <!-- حقل العنوان -->
     <div class="form-group">
       <label for="address">العنوان:</label>
-      <input type="text" id="address" name="address" placeholder="المدينة، الشارع، المبنى">
+      <input type="text" id="address" name="address" placeholder="المدينة، الشارع، المبنى" required>
     </div>
 
-    <!-- حقل تاريخ الميلاد -->
     <div class="form-group">
       <label for="birthdate">تاريخ الميلاد:</label>
-      <input type="date" id="birthdate" name="birthdate">
+      <input type="date" id="birthdate" name="birthdate" required>
     </div>
 
-    <!-- حقل البريد الإلكتروني -->
     <div class="form-group">
       <label for="email">البريد الإلكتروني:</label>
-      <input type="email" id="email" name="email" placeholder="name@domain.com">
+      <input type="email" id="email" name="email" placeholder="name@domain.com" required>
     </div>
 
-    <!-- زر الإرسال -->
-    <button type="submit" class="submit-btn">حفظ البيانات</button>
+    <button type="submit" class="submit-btn">حفظ البيانات وثبت الحساب 💾</button>
   </form>
 </div>
 
-<button id="mm" class="bb" disabled> let's go </button>
+<button id="mm" class="bb" disabled> Let's Go 🚀 </button>
 
-
-<
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
+// ⚙️ إعدادات الفايربيز الموحدة لمشروعك Marcaz Shabab
+const firebaseConfig = {
+    apiKey: "AIzaSyBpDxW-UlQSFqYfnUCTSb4acEe7pp8dV_c",
+    authDomain: "marcazshabab.firebaseapp.com",
+    databaseURL: "https://marcazshabab-default-rtdb.firebaseio.com",
+    projectId: "marcazshabab",
+    storageBucket: "marcazshabab.firebasestorage.app",
+    messagingSenderId: "403954625189",
+    appId: "1:403954625189:web:b49405402e5fcdf1723b4c"
+};
+
+// تشغيل الفايربيز
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
 document.addEventListener('DOMContentLoaded', () => {
   const myForm = document.getElementById('userDataForm');
   const letsGoBtn = document.getElementById("mm");
@@ -243,47 +223,49 @@ document.addEventListener('DOMContentLoaded', () => {
     const birthdate = document.getElementById('birthdate').value;
     const email = document.getElementById('email').value.trim();
 
-    // التحقق من أن الاسم مكتوب بشكل صحيح (حروف فقط)
+    // التحقق من الاسم (حروف فقط)
     const nameRegex = /^[\p{L}\s]+$/u;
     if (!nameRegex.test(username)) {
       alert("⚠️ يرجى إدخال اسم شخص حقيقي (حروف فقط).");
       return;
     }
 
-    // حفظ البيانات مع وقت التسجيل
+    // تجهيز كائن البيانات مع توقيت التسجيل الحقيقي
     const newUser = {
-      id: Date.now(),
-      username,
-      address,
-      birthdate,
-      email,
+      username: username,
+      address: address,
+      birthdate: birthdate,
+      email: email,
       loginTime: new Date().toLocaleString("ar-EG", { 
         dateStyle: "short", 
         timeStyle: "short" 
       })
     };
 
-    let usersList = JSON.parse(localStorage.getItem('allUsers')) || [];
-    usersList.push(newUser);
-    localStorage.setItem('allUsers', JSON.stringify(usersList));
-
-    // حفظ المستخدم الحالي لعرضه في الصفحة الرئيسية
-    localStorage.setItem("currentUser", JSON.stringify(newUser));
-
-    this.reset();
-
-    // تفعيل زر Lets Go بعد الحفظ
-    letsGoBtn.disabled = false;
+    // 🌟 حفظ البيانات في الفايربيز مباشرة تحت مسار 'allUsers' بشكل سحابي
+    database.ref('allUsers').push(newUser)
+      .then(() => {
+          // حفظ محلي احتياطي للمستخدم الحالي لتسهيل قراءته في الصفحة التالية
+          localStorage.setItem("currentUser", JSON.stringify(newUser));
+          
+          alert("تم تسجيل حسابك بنجاح في السيرفر! 🎉");
+          
+          myForm.reset();
+          // تفعيل زر المتابعة
+          letsGoBtn.disabled = false;
+      })
+      .catch((error) => {
+          console.error("خطأ أثناء التسجيل: ", error);
+          alert("حدث خطأ في الشبكة، يرجى المحاولة مرة أخرى.");
+      });
   });
 
-  // عند الضغط على زر Lets Go بعد التفعيل
+  // الانتقال للصفحة التالية عند الضغط
   letsGoBtn.addEventListener("click", () => {
-    window.location.href = "kh22.html"; // ينقل للصفحة الرئيسية
+    window.location.href = "kh22.html"; 
   });
 });
-
 </script>
-
 
 </body>
 </html>

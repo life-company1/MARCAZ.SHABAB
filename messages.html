@@ -12,7 +12,7 @@
         
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: #0f172a; /* خلفية الصفحة داكنة وعصرية */
+            background-color: #0f172a; 
             color: #f8fafc;
             padding: 40px 20px;
             display: flex;
@@ -51,7 +51,7 @@
         }
 
         .message-card {
-            background: #1e293b; /* خلفية الكروت داكنة وليست بيضاء */
+            background: #1e293b; 
             border-left: 5px solid #38bdf8;
             border-radius: 12px;
             padding: 24px;
@@ -60,7 +60,7 @@
             flex-direction: column;
             gap: 15px;
             transition: transform 0.2s;
-            height: 280px; /* طول ثابت للكروت لتوحيد المظهر */
+            height: 280px; 
         }
 
         .message-card:hover {
@@ -97,7 +97,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
-            -webkit-line-clamp: 3; /* يظهر 3 سطور فقط في الكرت الرئيسي لمنع التشويه */
+            -webkit-line-clamp: 3; 
             line-clamp: 3;
             -webkit-box-orient: vertical;
         }
@@ -142,7 +142,6 @@
             border: 1px solid #334155;
         }
 
-        /* تنسيق النافذة المنبثقة (Modal) لعرض الرسالة الكاملة بجميع أسطرها */
         .modal {
             display: none; 
             position: fixed; 
@@ -158,7 +157,7 @@
         }
 
         .modal-content {
-            background-color: #1e293b; /* خلفية المودال متناسقة وداكنة */
+            background-color: #1e293b; 
             color: #f8fafc;
             margin: auto;
             padding: 30px;
@@ -202,11 +201,11 @@
 
         .modal-body {
             font-size: 16px;
-            line-height: 1.8; /* مسافة ممتازة بين الأسطر */
+            line-height: 1.8; 
             color: #e2e8f0;
-            white-space: pre-wrap; /* تحافظ تماماً على توزيع الأسطر والفقرات كما كتبت */
+            white-space: pre-wrap; 
             max-height: 60vh;
-            overflow-y: auto; /* إضافة سكرول داخلي لو النص شديد الطول */
+            overflow-y: auto; 
             padding-left: 5px;
         }
     </style>
@@ -231,37 +230,66 @@
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
 <script>
-    const channel = new BroadcastChannel('center_announcements_channel');
+    // ⚙️ إعدادات مشروعك الحقيقي Marcaz Shabab
+    const firebaseConfig = {
+        apiKey: "AIzaSyBpDxW-UlQSFqYfnUCTSb4acEe7pp8dV_c",
+        authDomain: "marcazshabab.firebaseapp.com",
+        databaseURL: "https://marcazshabab-default-rtdb.firebaseio.com",
+        projectId: "marcazshabab",
+        storageBucket: "marcazshabab.firebasestorage.app",
+        messagingSenderId: "403954625189",
+        appId: "1:403954625189:web:b49405402e5fcdf1723b4c"
+    };
+
+    // تشغيل السيرفر بأمان
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const database = firebase.database();
+
     let allMessages = [];
 
-    function displayMessages(messages) {
-        allMessages = messages || [];
+    function displayMessages(messagesData) {
+        // فحص نوع البيانات وتحويلها لمصفوفة سواء جاءت كـ Object أو Array
+        if (messagesData && typeof messagesData === 'object' && !Array.isArray(messagesData)) {
+            allMessages = Object.keys(messagesData).map(key => messagesData[key]);
+        } else {
+            allMessages = messagesData || [];
+        }
+
         const container = document.getElementById("viewMessagesContainer");
         container.innerHTML = "";
 
-        if (!allMessages || allMessages.length === 0) {
+        if (allMessages.length === 0) {
             container.innerHTML = `<div class="empty-msg">لا توجد تنويهات أو رسائل جماعية نشطة حالياً.</div>`;
             return;
         }
 
-        // ترتيب تنازلي ليكون الأحدث في البداية
+        // ترتيب تنازلي (الأحدث يظهر فوق)
         const reversedMessages = [...allMessages].reverse();
 
         reversedMessages.forEach((msg, index) => {
             const originalIndex = allMessages.length - 1 - index;
-            const showReadMore = msg.content.length > 100 || msg.content.includes('\n');
+            const title = msg.title || "تنويه عام";
+            const content = msg.content || "";
+            const date = msg.date || "اليوم";
+            
+            const showReadMore = content.length > 100 || content.includes('\n');
 
             container.innerHTML += `
                 <div class="message-card">
                     <div class="msg-header">
-                        <div class="msg-title">📌 ${msg.title}</div>
+                        <div class="msg-title">📌 ${title}</div>
                         <span class="msg-tag">تنويه هام</span>
                     </div>
-                    <div class="msg-body">${msg.content}</div>
+                    <div class="msg-body">${content}</div>
                     ${showReadMore ? `<button class="read-more-btn" onclick="openModal(${originalIndex})">قراءة الكل...</button>` : ''}
                     <div class="msg-footer">
-                        <div>📅 ${msg.date}</div>
+                        <div>📅 ${date}</div>
                         <div style="font-weight: bold; color: #38bdf8;">إدارة المركز</div>
                     </div>
                 </div>
@@ -271,8 +299,9 @@
 
     function openModal(index) {
         const msg = allMessages[index];
-        document.getElementById("modalTitle").innerText = "📌 " + msg.title;
-        document.getElementById("modalBody").innerText = msg.content;
+        if (!msg) return;
+        document.getElementById("modalTitle").innerText = "📌 " + (msg.title || "");
+        document.getElementById("modalBody").innerText = msg.content || "";
         document.getElementById("msgModal").style.display = "block";
     }
 
@@ -287,14 +316,11 @@
         }
     }
 
-    channel.onmessage = function(event) {
-        if (event.data && event.data.type === 'REFRESH_MESSAGES') {
-            displayMessages(event.data.payload);
-        }
-    };
-
-    const localData = JSON.parse(localStorage.getItem('center_messages')) || [];
-    displayMessages(localData);
+    // 🌟 جلب التنويهات والرسائل لحظياً وسحابياً من السيرفر
+    database.ref('center_messages').on('value', (snapshot) => {
+        const liveData = snapshot.val();
+        displayMessages(liveData);
+    });
 </script>
 </body>
 </html>

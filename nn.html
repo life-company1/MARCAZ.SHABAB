@@ -1,0 +1,647 @@
+/* تعديلات شاشات الكمبيوتر والشاشات الكبيرة */
+        @media (min-width: 950px) {
+            body { padding: 20px; }
+            .admin-header { padding: 18px; margin-bottom: 20px; }
+            .admin-header h1 { font-size: 22px; }
+            .admin-header p { font-size: 13px; }
+            .tabs-menu { gap: 8px; margin-bottom: 20px; }
+            .tab-btn { padding: 8px 14px; font-size: 13px; }
+            .grid { display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
+            .card { padding: 18px; }
+            h2 { font-size: 15px; margin-bottom: 14px; }
+            input, select, textarea { font-size: 13px; padding: 10px; }
+            .btn { font-size: 13px; padding: 11px; }
+            .status-wrapper { flex-direction: row; justify-content: center; gap: 20px; }
+            .status-box { flex: 1; }
+            table { font-size: 13px; min-width: 100%; }
+            th, td { padding: 12px 10px; }
+        }
+    </style>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+        
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: #f8fafc; 
+            color: #334155;
+            padding: 20px; 
+        }
+        
+        .admin-header { 
+            text-align: center; 
+            margin-bottom: 25px; 
+            background: #0f172a; 
+            color: white; 
+            padding: 20px; 
+            border-radius: 12px; 
+        }
+        
+        .tabs-menu { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+            justify-content: center; 
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn { 
+            padding: 10px 20px; 
+            border: 1px solid #cbd5e1; 
+            background: white; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-family: 'Cairo'; 
+            font-weight: 600; 
+            font-size: 14px; 
+            transition: all 0.2s;
+        }
+        
+        .tab-btn.active { 
+            background: #0f172a; 
+            color: white; 
+            border-color: #0f172a; 
+        }
+        
+        .tab-content { 
+            display: none; 
+        }
+        
+        .tab-content.active { 
+            display: block; 
+        }
+        
+        .grid { 
+            display: grid; 
+            grid-template-columns: 380px 1fr; 
+            gap: 24px; 
+        }
+        
+        @media (max-width: 900px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+        
+        .card { 
+            background: white; 
+            padding: 24px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); 
+            border: 1px solid #e2e8f0; 
+            margin-bottom: 20px; 
+        }
+        
+        h2 { 
+            font-size: 16px; 
+            margin-bottom: 20px; 
+            color: #0f172a; 
+            border-bottom: 2px solid #e2e8f0; 
+            padding-bottom: 8px; 
+            font-weight: 700; 
+        }
+        
+        .form-group { 
+            margin-bottom: 16px; 
+        }
+        
+        label { 
+            display: block; 
+            font-size: 13px; 
+            font-weight: 600; 
+            margin-bottom: 6px; 
+            color: #475569; 
+        }
+        
+        input, select, textarea { 
+            width: 100%; 
+            padding: 10px 12px; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 6px; 
+            font-family: 'Cairo'; 
+            font-size: 14px; 
+            color: #334155; 
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #0f172a;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+        }
+        
+        textarea { 
+            resize: vertical; 
+            height: 100px; 
+        }
+        
+        .btn { 
+            padding: 12px; 
+            border: none; 
+            border-radius: 6px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            font-family: 'Cairo'; 
+            font-size: 14px; 
+            width: 100%; 
+            transition: background-color 0.2s ease;
+        }
+        
+        .btn-add { 
+            background: #0f172a; 
+            color: white; 
+        }
+        
+        .btn-add:hover { 
+            background: #1e293b; 
+        }
+        
+        .btn-delete { 
+            background: #ef4444; 
+            color: white; 
+            padding: 5px 10px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-family: 'Cairo'; 
+            font-size: 12px; 
+            font-weight: 600;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+        
+        .status-container { 
+            display: flex; 
+            gap: 15px; 
+            justify-content: center; 
+            margin-bottom: 20px; 
+        }
+        
+        .status-btn { 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 6px; 
+            font-family: 'Cairo'; 
+            font-weight: bold; 
+            cursor: pointer; 
+            color: white; 
+            transition: opacity 0.2s;
+        }
+
+        .status-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .status-btn.on { background: #10b981; }
+        .status-btn.off { background: #ef4444; }
+        
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-size: 14px; 
+            text-align: center; 
+        }
+        
+        th, td { 
+            border-bottom: 1px solid #e2e8f0; 
+            padding: 12px; 
+        }
+        
+        th { 
+            background: #f1f5f9; 
+            color: #475569; 
+            font-weight: 700; 
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+        
+        .no-data { 
+            color: #94a3b8; 
+            padding: 30px; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="admin-header">
+    <h1>لوحة التحكم الإدارية المركزية الشاملة</h1>
+    <p>إدارة الرسائل الجماعية، الأنشطة، الملعب، والمستخدمين</p>
+</div>
+
+<div class="tabs-menu">
+    <button class="tab-btn active" onclick="switchTab('msg-tab')">📢 الرسائل الجماعية</button>
+    <button class="tab-btn" onclick="switchTab('stadium-tab')">🏟️ حجز الملعب</button>
+    <button class="tab-btn" onclick="switchTab('activities-tab')">📅 الأنشطة الشهرية</button>
+    <button class="tab-btn" onclick="switchTab('users-tab')">👥 حالة المركز والمستخدمين</button>
+</div>
+
+<div id="msg-tab" class="tab-content active">
+    <div class="grid">
+        <div class="card">
+            <h2>إرسال تنويه جماعي جديد للجمهور</h2>
+            <form id="msgForm">
+                <div class="form-group">
+                    <label>عنوان التنويه</label>
+                    <input type="text" id="msg_title" placeholder="مثال: مواعيد العمل في العيد" required>
+                </div>
+                <div class="form-group">
+                    <label>التاريخ</label>
+                    <input type="text" id="msg_date" placeholder="مثال: الجمعة 2026/6/19" required>
+                </div>
+                <div class="form-group">
+                    <label>نص الرسالة بالكامل</label>
+                    <textarea id="msg_content" placeholder="اكتب تفاصيل الإعلان هنا للجمهور..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-add">نشر وإرسال فوري للشاشة 📢</button>
+            </form>
+        </div>
+        <div class="card">
+            <h2>الرسائل المنشورة حالياً</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>م</th>
+                            <th>العنوان</th>
+                            <th>التاريخ</th>
+                            <th>مضمون الرسالة</th>
+                            <th>إجراء</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashMsgTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="stadium-tab" class="tab-content">
+    <div class="grid">
+        <div class="card">
+            <h2>إضافة حجز ملعب جديد</h2>
+            <form id="stadiumForm">
+                <div class="form-group">
+                    <label>اسم المستأجر</label>
+                    <input type="text" id="std_name" placeholder="مثال: كابتن أحمد محمد" required>
+                </div>
+                <div class="form-group">
+                    <label>اليوم والتاريخ</label>
+                    <input type="text" id="std_date" placeholder="مثال: الجمعة 19 يونيو" required>
+                </div>
+                <div class="form-group">
+                    <label>الوقت (الساعة)</label>
+                    <input type="text" id="std_time" placeholder="مثال: من 8:00 إلى 9:00 مساءً" required>
+                </div>
+                <div class="form-group">
+                    <label>الفترة</label>
+                    <select id="std_period" required>
+                        <option value="ليل">🌙 مسائي / ليل</option>
+                        <option value="نهار">☀️ صباحي / نهار</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>المبلغ المدفوع (جنيه)</label>
+                    <input type="number" id="std_price" placeholder="مثال: 150" required>
+                </div>
+                <button type="submit" class="btn btn-add">تأكيد الحجز ونشره على الشاشة 🏟️</button>
+            </form>
+        </div>
+        <div class="card">
+            <h2>جدول حجوزات الملعب الحالية</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>م</th>
+                            <th>اسم المستأجر</th>
+                            <th>اليوم والتاريخ</th>
+                            <th>الوقت</th>
+                            <th>الفترة</th>
+                            <th>المبلغ</th>
+                            <th>إجراء</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashStadiumTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="activities-tab" class="tab-content">
+    <div class="grid">
+        <div class="card">
+            <h2>إضافة نشاط جديد</h2>
+            <form id="dashForm">
+                <div class="form-group"><label>اسم النشاط</label><input type="text" id="act_name" required></div>
+                <div class="form-group"><label>المجال</label><input type="text" id="act_field" required></div>
+                <div class="form-group"><label>عدد المستفيدين</label><input type="text" id="act_count" required></div>
+                <div class="form-group"><label>المرحلة السنية</label><input type="text" id="act_age" required></div>
+                <div class="form-group"><label>التاريخ</label><input type="text" id="act_date" required></div>
+                <button type="submit" class="btn btn-add">حفظ وإرسال للجدول</button>
+            </form>
+        </div>
+        <div class="card">
+            <h2>الأنشطة الحالية (التعديل والمراقبة)</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>م</th><th>اسم النشاط</th><th>المجال</th><th>عدد المستفيدين</th><th>المرحلة السنية</th><th>التاريخ</th><th>حذف</th></tr>
+                    </thead>
+                    <tbody id="dashActivitiesTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="users-tab" class="tab-content">
+    <div class="card">
+        <h2>🎛️ أزرار التحكم في حالة الخدمات بالفروع</h2>
+        <div style="display: flex; gap: 40px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;">
+            <div>
+                <p style="text-align: center; font-weight: bold; margin-bottom: 8px;">حالة المركز العام</p>
+                <div class="status-container">
+                    <button class="status-btn on" onclick="setCenterStatus(true)">فتح المركز</button>
+                    <button class="status-btn off" onclick="setCenterStatus(false)">غلق المركز</button>
+                </div>
+            </div>
+            <div>
+                <p style="text-align: center; font-weight: bold; margin-bottom: 8px;">غرفة البلايستيشن</p>
+                <div class="status-container">
+                    <button class="status-btn on" onclick="setPlaystationStatus(true)">فتح البلايستيشن</button>
+                    <button class="status-btn off" onclick="setPlaystationStatus(false)">غلق البلايستيشن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>👥 بيانات الأعضاء والمستخدمين المسجلين حالياً</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>اسم المستخدم</th><th>العنوان</th><th>تاريخ الميلاد</th><th>البريد الإلكتروني</th><th>ساعة التسجيل</th><th>إجراءات</th></tr>
+                </thead>
+                <tbody id="usersTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+    // ⚙️ تم دمج إعدادات مشروعك الحقيقي هنا بنجاح
+    const firebaseConfig = {
+        apiKey: "AIzaSyBpDxW-UlQSFqYfnUCTSb4acEe7pp8dV_c",
+        authDomain: "marcazshabab.firebaseapp.com",
+        databaseURL: "https://marcazshabab-default-rtdb.firebaseio.com",
+        projectId: "marcazshabab",
+        storageBucket: "marcazshabab.firebasestorage.app",
+        messagingSenderId: "403954625189",
+        appId: "1:403954625189:web:b49405402e5fcdf1723b4c"
+    };
+
+    // تشغيل السيرفر
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // نظام التنقل بين التبويبات
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        if (event && event.currentTarget) {
+            event.currentTarget.classList.add('active');
+        }
+    }
+
+    // ==================== 1. إدارة الرسائل الجماعية عبر الإنترنت ====================
+    function renderMessages(messagesList) {
+        const tbody = document.getElementById("dashMsgTableBody");
+        tbody.innerHTML = "";
+        
+        if (!messagesList || messagesList.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="no-data">لا توجد رسائل منشورة حالياً.</td></tr>`;
+            return;
+        }
+
+        messagesList.forEach((item, index) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td style="font-weight:600">${item.title}</td>
+                    <td>${item.date}</td>
+                    <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.content}</td>
+                    <td><button class="btn-delete" onclick="deleteMsgItem(${index})">حذف الإعلان</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    database.ref('center_messages').on('value', (snapshot) => {
+        const messages = snapshot.val() || [];
+        renderMessages(messages);
+    });
+
+    document.getElementById("msgForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        database.ref('center_messages').once('value').then((snapshot) => {
+            let messages = snapshot.val() || [];
+            messages.push({
+                title: document.getElementById("msg_title").value,
+                date: document.getElementById("msg_date").value,
+                content: document.getElementById("msg_content").value
+            });
+            database.ref('center_messages').set(messages);
+        });
+        this.reset();
+    });
+
+    window.deleteMsgItem = function(index) {
+        if(confirm("هل تريد حذف هذا الإعلان نهائياً من شاشة العرض؟")) {
+            database.ref('center_messages').once('value').then((snapshot) => {
+                let messages = snapshot.val() || [];
+                messages.splice(index, 1);
+                database.ref('center_messages').set(messages);
+            });
+        }
+    }
+
+    // ==================== 2. إدارة حجز الملعب عبر الإنترنت ====================
+    function renderStadium(bookingsList) {
+        const tbody = document.getElementById("dashStadiumTableBody");
+        tbody.innerHTML = "";
+
+        if (!bookingsList || bookingsList.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="no-data">لا توجد حجوزات مسجلة للملعب حالياً.</td></tr>`;
+            return;
+        }
+
+        bookingsList.forEach((item, index) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td style="font-weight:600">${item.name}</td>
+                    <td>${item.date}</td>
+                    <td>${item.time}</td>
+                    <td>${item.period === 'نهار' ? '☀️ صباحي' : '🌙 مسائي'}</td>
+                    <td style="color:#16a34a; font-weight:700">${item.price} ج</td>
+                    <td><button class="btn-delete" onclick="deleteStadiumItem(${index})">إلغاء</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    database.ref('stadium_bookings').on('value', (snapshot) => {
+        const bookings = snapshot.val() || [];
+        renderStadium(bookings);
+    });
+
+    document.getElementById("stadiumForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        database.ref('stadium_bookings').once('value').then((snapshot) => {
+            let bookings = snapshot.val() || [];
+            bookings.push({
+                name: document.getElementById("std_name").value,
+                date: document.getElementById("std_date").value,
+                time: document.getElementById("std_time").value,
+                period: document.getElementById("std_period").value,
+                price: document.getElementById("std_price").value
+            });
+            database.ref('stadium_bookings').set(bookings);
+        });
+        this.reset();
+    });
+
+    window.deleteStadiumItem = function(index) {
+        if(confirm("هل تريد إلغاء حجز هذا الملعب وحذفه من الشاشة؟")) {
+            database.ref('stadium_bookings').once('value').then((snapshot) => {
+                let bookings = snapshot.val() || [];
+                bookings.splice(index, 1);
+                database.ref('stadium_bookings').set(bookings);
+            });
+        }
+    }
+
+    // ==================== 3. إدارة الأنشطة الشهـرية عبر الإنترنت ====================
+    function renderActivities(activitiesList) {
+        const tbody = document.getElementById("dashActivitiesTableBody");
+        tbody.innerHTML = "";
+        
+        if (!activitiesList || activitiesList.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="no-data">لا توجد أنشطة شهرية مسجلة حالياً.</td></tr>`;
+            return;
+        }
+
+        activitiesList.forEach((item, index) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td style="font-weight:600">${item.name}</td>
+                    <td>${item.field}</td>
+                    <td>${item.count}</td>
+                    <td>${item.age}</td>
+                    <td>${item.date}</td>
+                    <td><button class="btn-delete" onclick="deleteActivityItem(${index})">حذف</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    database.ref('my_activities').on('value', (snapshot) => {
+        const activities = snapshot.val() || [];
+        renderActivities(activities);
+    });
+
+    document.getElementById("dashForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        database.ref('my_activities').once('value').then((snapshot) => {
+            let activities = snapshot.val() || [];
+            activities.push({
+                name: document.getElementById("act_name").value,
+                field: document.getElementById("act_field").value,
+                count: document.getElementById("act_count").value,
+                age: document.getElementById("act_age").value,
+                date: document.getElementById("act_date").value
+            });
+            database.ref('my_activities').set(activities);
+        });
+        this.reset();
+    });
+
+    window.deleteActivityItem = function(index) {
+        if(confirm("هل تريد حذف هذا النشاط؟")) {
+            database.ref('my_activities').once('value').then((snapshot) => {
+                let activities = snapshot.val() || [];
+                activities.splice(index, 1);
+                database.ref('my_activities').set(activities);
+            });
+        }
+    }
+
+    // ==================== 4. التحكم والمستخدمين عبر الإنترنت ====================
+    function setCenterStatus(isOpen) {
+        database.ref('status/centerStatus').set(isOpen ? "open" : "closed").then(() => {
+            alert(isOpen ? "تم إرسال إشارة للإنترنت: فتح المركز العام 🟢" : "تم إرسال إشارة للإنترنت: غلق المركز العام 🔴");
+        });
+    }
+
+    function setPlaystationStatus(isAvailable) {
+        database.ref('status/playstationStatus').set(isAvailable ? "available" : "unavailable").then(() => {
+            alert(isAvailable ? "تم إرسال إشارة للإنترنت: فتح غرفة البلايستيشن 🎮" : "تم إرسال إشارة للإنترنت: غلق غرفة البلايستيشن 🚫");
+        });
+    }
+
+    function renderUsers(usersList) {
+        const tableBody = document.getElementById('usersTableBody');
+        let tbodyData = [];
+
+        if (!usersList || Object.keys(usersList).length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="6" class="no-data">لا توجد بيانات مستخدمين مسجلة حتى الآن.</td></tr>`;
+            return;
+        }
+
+        Object.keys(usersList).forEach(key => {
+            let user = usersList[key];
+            tbodyData.push(`
+                <tr>
+                    <td style="font-weight:600">${user.username}</td>
+                    <td>${user.address}</td>
+                    <td>${user.birthdate}</td>
+                    <td>${user.email}</td>
+                    <td>${user.loginTime ? user.loginTime : "غير متوفر"}</td>
+                    <td><button class="btn-delete" onclick="deleteUser('${key}')">حذف الحساب</button></td>
+                </tr>
+            `);
+        });
+        tableBody.innerHTML = tbodyData.join('');
+    }
+
+    database.ref('allUsers').on('value', (snapshot) => {
+        const users = snapshot.val();
+        renderUsers(users);
+    });
+
+    window.deleteUser = function(userKey) {
+        if(confirm("هل أنت متأكد من حذف هذا المستخدم نهائياً؟")) {
+            database.ref('allUsers/' + userKey).remove();
+        }
+    }
+</script>
+</body>
+</html>

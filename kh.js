@@ -1,3 +1,20 @@
+// ⚙️ إعدادات الفايربيز الموحدة لمشروعك Marcaz Shabab
+const firebaseConfig = {
+    apiKey: "AIzaSyBpDxW-UlQSFqYfnUCTSb4acEe7pp8dV_c",
+    authDomain: "marcazshabab.firebaseapp.com",
+    databaseURL: "https://marcazshabab-default-rtdb.firebaseio.com",
+    projectId: "marcazshabab",
+    storageBucket: "marcazshabab.firebasestorage.app",
+    messagingSenderId: "403954625189",
+    appId: "1:403954625189:web:b49405402e5fcdf1723b4c"
+};
+
+// تشغيل الفايربيز إذا لم يكن قد تم تشغيله مسبقاً في الصفحة
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const database = firebase.database();
+
 let searchTimeout; // متغير لتخزين مؤقت الـ 5 ثوانٍ
 
 function performSearch() {
@@ -35,13 +52,12 @@ function performSearch() {
 
     // تلوين الكلمات المتطابقة
     textNodes.forEach(node => {
-        // فحص إضافي للتأكد من أن النص يحتوي على حروف وليس فارغاً
         if (node.nodeValue && node.nodeValue.trim() !== "") {
             const matches = node.nodeValue.match(regex);
             if (matches) {
                 foundCount++;
                 const span = document.createElement('span');
-                span.className = "search-match-container"; // كلاس فرعي للحفاظ على بنية الـ HTML
+                span.className = "search-match-container"; 
                 span.innerHTML = node.nodeValue.replace(regex, `<mark class="custom-highlight">$1</mark>`);
                 node.parentNode.replaceChild(span, node);
             }
@@ -72,14 +88,12 @@ function performSearch() {
         }, 5000);
 
     } else {
-        // ❌ إذا لم يتم العثور على الكلمة المطلوبة
         alert("طلبك غير متوفر");
     }
 }
 
 // دالة مسح الهايلايت وإعادة النص لشغله الطبيعي بنسبة 100%
 function clearHighlights() {
-    // 1. مسح الهايلايت وإرجاع النصوص لأصلها
     const containers = document.querySelectorAll('.search-match-container');
     containers.forEach(container => {
         const parent = container.parentNode;
@@ -89,7 +103,6 @@ function clearHighlights() {
         }
     });
 
-    // طريقة احتياطية للمسح المباشر لو وجدت
     const highlights = document.querySelectorAll('.custom-highlight');
     highlights.forEach(highlight => {
         const parent = highlight.parentNode;
@@ -99,7 +112,6 @@ function clearHighlights() {
         }
     });
     
-    // 2. إرجاع القائمة المنسدلة لحالتها الافتراضية المخفية
     const menuUl = document.querySelector('.ul1 ul');
     if (menuUl) {
         menuUl.style.display = ''; 
@@ -111,59 +123,27 @@ function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-/* 🛑 الأكواد بالأسفل هي المسؤولة عن منع الـ Refresh تماماً */
-
-// منع عمل ريفريش عند الضغط على زر Enter داخل خانة البحث
-const searchInputEl = document.getElementById("searchInput");
-if (searchInputEl) {
-    searchInputEl.addEventListener("keypress", function(e) {
-        if (e.key === "Enter") {
-            e.preventDefault(); // منع المتصفح من إرسال الفورم وعمل ريفريش
-            performSearch();
-        }
-    });
-}
-
-// تأكيد إضافي لمنع الفورم بأكمله من عمل ريفريش لأي سبب
-const searchFormEl = document.getElementById("searchForm");
-if (searchFormEl) {
-    searchFormEl.addEventListener("submit", function(e) {
-        e.preventDefault();
-    });
-}
-
-// كود صفحة إنشاء الحساب وحفظ البيانات (مؤمن بالكامل ضد أخطاء الصفحات الأخرى)
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('userDataForm');
-    const toast = document.getElementById('toast');
-
-    if (form) {
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-
-            const newUser = {
-                id: Date.now(),
-                username: document.getElementById('username').value.trim(),
-                address: document.getElementById('address').value.trim(),
-                birthdate: document.getElementById('birthdate').value,
-                email: document.getElementById('email').value.trim()
-            };
-
-            let usersList = JSON.parse(localStorage.getItem('allUsers')) || [];
-            usersList.push(newUser);
-            localStorage.setItem('allUsers', JSON.stringify(usersList));
-
-            form.reset();
-
-            if (toast) {
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 3000);
+/* منع عمل ريفريش عند الضغط على زر Enter داخل خانة البحث */
+document.addEventListener("DOMContentLoaded", () => {
+    const searchInputEl = document.getElementById("searchInput");
+    if (searchInputEl) {
+        searchInputEl.addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
+                e.preventDefault(); 
+                performSearch();
             }
+        });
+    }
+
+    const searchFormEl = document.getElementById("searchForm");
+    if (searchFormEl) {
+        searchFormEl.addEventListener("submit", function(e) {
+            e.preventDefault();
         });
     }
 });
 
-// كود الترحيب بالمستخدم الحالي عند التحميل
+// ترحيب الحساب (يقرأ الحساب الحالي المسجل محلياً من آخر عملية دخول للجهاز)
 document.addEventListener("DOMContentLoaded", () => {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const hhElement = document.getElementById("hh");
@@ -172,36 +152,31 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// دالة تحديث حالة المركز (مفتوح / مغلق)
-function updateDashboardStatus() {
+/* 🌟 الربط الحي والسحابي مع Firebase لحالة المركز (مفتوح / مغلق) دون الحاجة لـ localStorage */
+function listenToCenterStatus() {
   const statusDiv = document.getElementById("dashboardStatus");
-  if (!statusDiv) return; // فحص أمان لو العنصر مش في الصفحة دي
+  if (!statusDiv) return; // فحص أمان
   
   const textSpan = statusDiv.querySelector(".text");
-  const status = localStorage.getItem("centerStatus");
 
-  if (status === "open") {
-    statusDiv.classList.add("open");
-    statusDiv.classList.remove("closed");
-    if (textSpan) textSpan.textContent = "المركز مفتوح الآن";
-  } else {
-    statusDiv.classList.add("closed");
-    statusDiv.classList.remove("open");
-    if (textSpan) textSpan.textContent = "المركز مغلق الآن";
-  }
+  // الاستماع للتحديثات القادمة من الداشبورد لحظياً عبر الإنترنت
+  database.ref('centerStatus').on('value', (snapshot) => {
+    const status = snapshot.val() || "closed";
+
+    if (status === "open") {
+      statusDiv.classList.add("open");
+      statusDiv.classList.remove("closed");
+      if (textSpan) textSpan.textContent = "المركز مفتوح الآن";
+    } else {
+      statusDiv.classList.add("closed");
+      statusDiv.classList.remove("open");
+      if (textSpan) textSpan.textContent = "المركز مغلق الآن";
+    }
+  });
 }
 
-// تشغيل عند فتح الصفحة
-document.addEventListener("DOMContentLoaded", updateDashboardStatus);
-
-// تحديث تلقائي لو اتغيرت القيمة من لوحة الأدمن دون الحاجة لعمل ريفريش
-window.addEventListener("storage", function(e) {
-  if (e.key === "centerStatus") {
-    updateDashboardStatus();
-  }
-});
-
-
+// تشغيل مراقبة حالة المركز فور تحميل الصفحة
+document.addEventListener("DOMContentLoaded", listenToCenterStatus);
 
 
 
