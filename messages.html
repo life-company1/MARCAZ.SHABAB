@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+   <link rel="icon" type="image/png" href="kh1 .jpeg" sizes="32x32" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الإعلانات والتنويهات العامة</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #0f172a; /* خلفية الصفحة داكنة وعصرية */
+            color: #f8fafc;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .screen-header {
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #38bdf8;
+            width: fit-content;
+            margin: 0 auto 10px auto;
+        }
+
+        .screen-header h1 {
+            font-size: 28px;
+            color: #38bdf8;
+            font-weight: 700;
+        }
+
+        .messages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            width: 100%;
+        }
+
+        .message-card {
+            background: #1e293b; /* خلفية الكروت داكنة وليست بيضاء */
+            border-left: 5px solid #38bdf8;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: transform 0.2s;
+            height: 280px; /* طول ثابت للكروت لتوحيد المظهر */
+        }
+
+        .message-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .msg-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .msg-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+
+        .msg-tag {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            background-color: #334155;
+            color: #94a3b8;
+        }
+
+        .msg-body {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #cbd5e1;
+            font-weight: 600;
+            white-space: pre-wrap; 
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* يظهر 3 سطور فقط في الكرت الرئيسي لمنع التشويه */
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: #38bdf8;
+            font-family: 'Cairo';
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            text-align: right;
+            align-self: flex-start;
+            padding: 0;
+            margin-top: -5px;
+        }
+
+        .read-more-btn:hover {
+            text-decoration: underline;
+        }
+
+        .msg-footer {
+            margin-top: auto;
+            border-top: 1px solid #334155;
+            padding-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .empty-msg {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #94a3b8;
+            padding: 60px;
+            font-weight: 600;
+            background: #1e293b;
+            border-radius: 12px;
+            border: 1px solid #334155;
+        }
+
+        /* تنسيق النافذة المنبثقة (Modal) لعرض الرسالة الكاملة بجميع أسطرها */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            padding-top: 80px; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.6); 
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #1e293b; /* خلفية المودال متناسقة وداكنة */
+            color: #f8fafc;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #334155;
+            width: 85%;
+            max-width: 650px;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            animation: animatetop 0.3s;
+        }
+
+        @keyframes animatetop {
+            from {top:-300px; opacity:0}
+            to {top:0; opacity:1}
+        }
+
+        .close-btn {
+            color: #94a3b8;
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #ef4444;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 12px;
+        }
+
+        .modal-body {
+            font-size: 16px;
+            line-height: 1.8; /* مسافة ممتازة بين الأسطر */
+            color: #e2e8f0;
+            white-space: pre-wrap; /* تحافظ تماماً على توزيع الأسطر والفقرات كما كتبت */
+            max-height: 60vh;
+            overflow-y: auto; /* إضافة سكرول داخلي لو النص شديد الطول */
+            padding-left: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="screen-header">
+        <h1>📢 لوحة الإعلانات والتنويهات الجماعية للمركز</h1>
+    </div>
+
+    <div class="messages-grid" id="viewMessagesContainer">
+        <div class="empty-msg">في انتظار نشر رسائل جديدة من إدارة المركز...</div>
+    </div>
+</div>
+
+<div id="msgModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+    const channel = new BroadcastChannel('center_announcements_channel');
+    let allMessages = [];
+
+    function displayMessages(messages) {
+        allMessages = messages || [];
+        const container = document.getElementById("viewMessagesContainer");
+        container.innerHTML = "";
+
+        if (!allMessages || allMessages.length === 0) {
+            container.innerHTML = `<div class="empty-msg">لا توجد تنويهات أو رسائل جماعية نشطة حالياً.</div>`;
+            return;
+        }
+
+        // ترتيب تنازلي ليكون الأحدث في البداية
+        const reversedMessages = [...allMessages].reverse();
+
+        reversedMessages.forEach((msg, index) => {
+            const originalIndex = allMessages.length - 1 - index;
+            const showReadMore = msg.content.length > 100 || msg.content.includes('\n');
+
+            container.innerHTML += `
+                <div class="message-card">
+                    <div class="msg-header">
+                        <div class="msg-title">📌 ${msg.title}</div>
+                        <span class="msg-tag">تنويه هام</span>
+                    </div>
+                    <div class="msg-body">${msg.content}</div>
+                    ${showReadMore ? `<button class="read-more-btn" onclick="openModal(${originalIndex})">قراءة الكل...</button>` : ''}
+                    <div class="msg-footer">
+                        <div>📅 ${msg.date}</div>
+                        <div style="font-weight: bold; color: #38bdf8;">إدارة المركز</div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function openModal(index) {
+        const msg = allMessages[index];
+        document.getElementById("modalTitle").innerText = "📌 " + msg.title;
+        document.getElementById("modalBody").innerText = msg.content;
+        document.getElementById("msgModal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("msgModal").style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById("msgModal");
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    channel.onmessage = function(event) {
+        if (event.data && event.data.type === 'REFRESH_MESSAGES') {
+            displayMessages(event.data.payload);
+        }
+    };
+
+    const localData = JSON.parse(localStorage.getItem('center_messages')) || [];
+    displayMessages(localData);
+</script>
+</body>
+</html>
