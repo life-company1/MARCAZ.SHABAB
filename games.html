@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+   <link rel="icon" type="image/png" href="kh1 .jpeg" sizes="32x32" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الألعاب المتاحة</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+        
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: #0f172a; 
+            color: #f8fafc;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 20px;
+        }
+        
+        .header { 
+            text-align: center; 
+            margin-bottom: 24px; 
+            background: #1e293b; 
+            padding: 20px; 
+            border-radius: 12px; 
+            border: 1px solid #334155;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            font-size: 22px; 
+            color: #38bdf8;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .header p {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        
+        .games-grid { 
+            display: flex;
+            flex-direction: column;
+            gap: 16px; 
+            width: 100%;
+        }
+        
+        .game-card { 
+            background: #1e293b; 
+            padding: 18px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2); 
+            border: 1px solid #334155; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .game-card:active {
+            transform: scale(0.98); /* تأثير خفيف عند الضغط على الموبايل */
+        }
+        
+        .game-info h2 { 
+            font-size: 16px; 
+            color: #f8fafc; 
+            font-weight: 700; 
+            margin-bottom: 4px;
+        }
+        
+        .game-info p { 
+            font-size: 13px; 
+            color: #94a3b8; 
+        }
+        
+        .price-tag {
+            background: #0f172a;
+            border: 1px solid #38bdf8;
+            color: #38bdf8;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .price-tag span {
+            display: block;
+            font-size: 10px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>الألعاب المتاحة</h1>
+            <p>استمتع بوقتك معنا بأفضل الأسعار</p>
+        </div>
+
+        <div class="games-grid">
+            
+            <div class="game-card">
+                <div class="game-info">
+                    <h2>تنس طاولة</h2>
+                    <p>نصف ساعة لعب ممتع</p>
+                </div>
+                <div class="price-tag">
+                    5 جـ م
+                    <span>نصف ساعة</span>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="game-info">
+                    <h2>بلياردو</h2>
+                    <p>نصف ساعة تحدي وتركيز</p>
+                </div>
+                <div class="price-tag">
+                    10 جـ م
+                    <span>نصف ساعة</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <p>أهلاً بكم في أي وقت</p>
+        </div>
+    </div>
+
+</body>
+</html>

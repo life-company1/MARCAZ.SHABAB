@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>هيئة العمل - مركز شباب المحلاوي</title>
+    <link rel="icon" type="image/png" href="kh1 .jpeg" sizes="32x32" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+    <style>
+      /* --- 1. إعدادات عامة وتصفير الهوامش --- */
+      html {
+          height: 100%;
+      }
+
+      * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+          direction: rtl;
+          background: linear-gradient(135deg, #144574bb, #1a615d, #2b6c77, #3e595a);
+          color: bisque;
+          min-height: 100vh;
+          overflow-x: hidden;
+          display: flex;
+          flex-direction: column;
+      }
+
+      /* --- 2. الهيدر الموحد والمعدل --- */
+      header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 30px;
+          background: #0d4b64;
+          box-shadow: 0 2px 10px rgba(17, 226, 191, 0.637);
+          position: relative;
+          z-index: 100;
+      }
+
+      header h1 {
+          font-size: 22px;
+          color: #889dc2b6;
+          font-weight: 700;
+          flex-grow: 1;
+          margin-right: 20px;
+      }
+
+      .header-logo-group {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+      }
+
+      .kk {
+          height: 60px;
+          width: auto;
+          object-fit: contain;
+      }
+
+      .cartoon-character video {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid #00ffc8f6;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      /* القائمة المنسدلة */
+      .ul1 {
+          position: relative;
+          display: inline-block;
+      }
+
+      .ul1 > i {
+          font-size: 24px;
+          color: #b8dafc;
+          cursor: pointer;
+          padding: 10px;
+          transition: color 0.3s;
+      }
+
+      .ul1 > i:hover {
+          color: #399ddf;
+      }
+
+      .ul1 ul {
+          display: none;
+          position: absolute;
+          right: 0;
+          top: 100%;
+          background-color: #a7a7a7;
+          min-width: 200px;
+          box-shadow: 0px 8px 24px rgba(47, 202, 207, 0.137);
+          border-radius: 12px;
+          padding: 10px 0;
+          list-style: none;
+          border: 1px solid #57718a;
+      }
+
+      .ul1:hover ul {
+          display: block;
+      }
+
+      .ul1 ul li a {
+          color: #4c5f81;
+          padding: 12px 20px;
+          text-decoration: none;
+          display: block;
+          font-weight: 500;
+          font-size: 15px;
+          transition: all 0.2s ease;
+      }
+
+      .ul1 ul li a:hover {
+          background-color: #123c58;
+          color: #3182ce;
+          padding-right: 25px;
+      }
+
+      /* --- 3. تصميم صفحة هيئة العمل --- */
+      .content-area {
+          flex-grow: 1;
+          padding: 40px 20px;
+          max-width: 1200px;
+          margin: 0 auto;
+          width: 100%;
+          text-align: center;
+      }
+
+      .page-title {
+          font-size: 32px;
+          color: #8fb6b8;
+          margin-bottom: 40px;
+          font-weight: 800;
+          position: relative;
+          display: inline-block;
+          padding-bottom: 10px;
+      }
+
+      .page-title::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 80px;
+          height: 3px;
+          background-color: #00ffc8f6;
+          border-radius: 2px;
+      }
+
+      /* شبكة عرض البطاقات */
+      .staff-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 25px;
+          justify-content: center;
+          align-items: stretch;
+      }
+
+      /* بطاقة الموظف الافتراضية */
+      .staff-card {
+          background: rgba(13, 75, 100, 0.6);
+          border: 1px solid rgba(17, 226, 191, 0.3);
+          border-radius: 15px;
+          padding: 25px 20px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+          transition: all 0.3s ease;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 15px;
+      }
+
+      .staff-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 8px 25px rgba(17, 226, 191, 0.5);
+          border-color: rgba(17, 226, 191, 0.8);
+      }
+
+      /* تمييز بطاقة المدير لتكون أكبر وبشكل مميز في البداية */
+      .staff-card.manager {
+          grid-column: 1 / -1;
+          max-width: 400px;
+          margin: 0 auto 20px auto;
+          background: rgba(13, 75, 100, 0.85);
+          border: 2px solid #ffdd67;
+          box-shadow: 0 4px 20px rgba(255, 221, 103, 0.4);
+      }
+      
+      .staff-card.manager:hover {
+          box-shadow: 0 8px 30px rgba(255, 221, 103, 0.7);
+          border-color: #ffdd67;
+      }
+
+      /* أيقونات الوظائف الدائرية */
+      .avatar-icon {
+          width: 70px;
+          height: 70px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 30px;
+          color: #00ffc8f6;
+          border: 2px solid rgba(17, 226, 191, 0.5);
+      }
+
+      .manager .avatar-icon {
+          color: #ffdd67;
+          border-color: #ffdd67;
+          font-size: 35px;
+      }
+
+      .staff-name {
+          font-size: 20px;
+          font-weight: 700;
+          color: #ffffff;
+      }
+
+      .staff-role {
+          font-size: 15px;
+          font-weight: 600;
+          color: #8bb3df;
+          background: rgba(0, 0, 0, 0.2);
+          padding: 5px 15px;
+          border-radius: 20px;
+          border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .manager .staff-role {
+          color: #ffdd67;
+          background: rgba(255, 221, 103, 0.1);
+      }
+
+      /* --- 4. الفوتر الثابت بالأسفل --- */
+      footer {
+          margin-top: auto;
+          width: 100%;
+      }
+
+      .foaterOfThepage {
+          background-color: #0d4b64;
+          padding: 30px 20px;
+          text-align: center;
+          font-size: 18px;
+          box-shadow: 0 -5px 20px rgba(17, 226, 191, 0.3);
+          color: #849ae4bd;
+      }
+
+      .foaterOfThepage p {
+          margin-top: 10px;
+          font-size: 14px;
+      }
+
+      /* --- 5. شاشات الميديا للتجاوب التام --- */
+      @media (max-width: 768px) {
+          .page-title { font-size: 26px; }
+          header h1 { font-size: 16px; }
+          .kk, .cartoon-character video { height: 45px; width: 45px; }
+          .staff-grid { grid-template-columns: 1fr; padding: 0 10px; }
+      }
+    </style>
+</head>
+<body>
+
+    <header>
+      <div class="ul1" id="ul1">
+        <i class="fa-solid fa-bars"></i>
+        <ul>
+          <li><a href="kh22.html">الرئيسية</a></li>      
+          <li><a href="active.html">حالة النشاط</a></li>      
+          <li><a href="global.html">نبذة عامة</a></li>
+          <li><a href="">حجز الملعب</a></li>
+        </ul>
+      </div>
+
+      <h1>مركز شباب المحلاوي</h1>
+
+      <div class="header-logo-group">
+        <div class="cartoon-character">
+          <video autoplay loop muted playsinline>
+            <source src="nnn.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <img src="kh1.png" alt="logo" class="kk" />
+      </div>
+    </header>
+
+    <main class="content-area">
+        <h2 class="page-title">هيئة العمل بالمركز</h2>
+
+        <div class="staff-grid">
+            
+            <div class="staff-card manager">
+                <div class="avatar-icon"><i class="fa-solid fa-user-tie"></i></div>
+                <div class="staff-name">جيهان طه الخميسي</div>
+                <div class="staff-role">المدير</div>
+            </div>
+
+            <div class="staff-card">
+                <div class="avatar-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                <div class="staff-name">نوسه محمد الغالي</div>
+                <div class="staff-role">مشرف مالي</div>
+            </div>
+
+            <div class="staff-card">
+                <div class="avatar-icon"><i class="fa-solid fa-book-bookmark"></i></div>
+                <div class="staff-name">هدي محمد شحاته</div>
+                <div class="staff-role">أمينة مكتبة</div>
+            </div>
+
+            <div class="staff-card">
+                <div class="avatar-icon"><i class="fa-solid fa-medal"></i></div>
+                <div class="staff-name">محمد العزبي درويش</div>
+                <div class="staff-role">مشرف رياضي</div>
+            </div>
+
+            <div class="staff-card">
+                <div class="avatar-icon"><i class="fa-solid fa-dumbbell"></i></div>
+                <div class="staff-name">ياسر المتولي جبريل</div>
+                <div class="staff-role">مشرف رياضي</div>
+            </div>
+
+            <div class="staff-card">
+                <div class="avatar-icon"><i class="fa-solid fa-users-gear"></i></div>
+                <div class="staff-name">بسمة السيد زهيري</div>
+                <div class="staff-role">مشرف أنشطة وعلاقات عامة</div>
+            </div>
+
+            <div class="staff-card">
+                <div class="avatar-icon"><i class="fa-solid fa-id-card-clip"></i></div>
+                <div class="staff-name">ياسمين فضلون رية</div>
+                <div class="staff-role">مشرف أنشطة</div>
+            </div>
+
+            <div class="staff-card">
+                <div class="avatar-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
+                <div class="staff-name">سوزان المهدي النحاس</div>
+                <div class="staff-role">مشرف أنشطة</div>
+            </div>
+
+            <div class="staff-card">
+                <div class="avatar-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                <div class="staff-name">زاهر محمد ميدان</div>
+                <div class="staff-role">عامل</div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+      <div class="foaterOfThepage">
+        كلمنا على : 01031508615
+        <p>هذا الموقع تم برمجته من قبل: Life_company</p>
+      </div>    
+    </footer>
+
+    <script src="kh.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

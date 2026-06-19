@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>مركز شباب المحلاوي بالدقهلية</title>
+    <link rel="icon" type="image/png" href="kh1 .jpeg" sizes="32x32" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+    <style>
+     /* ==========================================
+   1. تصفير الهوامش وضبط الارتفاع الكامل للموقع
+   ========================================== */
+html {
+    height: 100%;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    direction: rtl;
+    background: linear-gradient(135deg, #144574bb, #166b67, #2b6c77, #3e595a);
+    color: bisque;
+    min-height: 100vh;
+    overflow-x: hidden;
+    /* السر هنا لضبط الفوتر في الأسفل دائماً */
+    display: flex;
+    flex-direction: column;
+}
+
+.bebas-neue-regular {
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* ==========================================
+   2. الهيدر (القائمة، العنوان، ومجموعة الشعار)
+   ========================================== */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    background: #0d4b64;
+    box-shadow: 0 2px 10px rgba(17, 226, 191, 0.637);
+    position: relative;
+    z-index: 100;
+}
+
+header h1 {
+    font-size: 22px;
+    color: #889dc2b6;
+    font-weight: 700;
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
+/* الحاوية التي تجمع الشعار والفيديو بجانب بعضهما */
+.header-logo-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.kk {
+    height: 60px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* تنسيق فيديو الكرتون في الهيدر */
+.cartoon-character video {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #00ffc8f6;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* القائمة المنسدلة */
+.ul1 {
+    position: relative;
+    display: inline-block;
+}
+
+.ul1 > i {
+    font-size: 24px;
+    color: #b8dafc;
+    cursor: pointer;
+    padding: 10px;
+    transition: color 0.3s;
+}
+
+.ul1 > i:hover {
+    color: #399ddf;
+}
+
+.ul1 ul {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: #a7a7a7;
+    min-width: 200px;
+    box-shadow: 0px 8px 24px rgba(47, 202, 207, 0.137);
+    border-radius: 12px;
+    padding: 10px 0;
+    list-style: none;
+    border: 1px solid #57718a;
+}
+
+.ul1:hover ul {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+.ul1 ul li a {
+    color: #4c5f81;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: block;
+    font-weight: 500;
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+
+.ul1 ul li a:hover {
+    background-color: #123c58;
+    color: #3182ce;
+    padding-right: 25px;
+}
+
+/* ==========================================
+   3. محتوى الصفحة الرئيسي (الترحيب، البحث، الخريطة)
+   ========================================== */
+.body1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    flex-grow: 1; /* لجعل المحتوى يأخذ المساحة المتبقية ويترك الأسفل للفوتر */
+}
+
+#hh {
+    color: #8fb6b8;
+    font-style: normal;
+    font-size: 32px;
+    margin-bottom: 20px;
+    font-weight: 800;
+}
+
+/* شريط البحث */
+.search-container {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 50px;
+    padding: 4px 8px;
+    width: 100%;
+    max-width: 450px;
+    margin: 20px auto 40px auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    direction: rtl;
+    transition: all 0.3s ease;
+}
+
+.search-container:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 4px 20px rgba(9, 255, 214, 0.623);
+    max-width: 480px;
+}
+
+#searchInput {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    padding: 10px 14px;
+    font-size: 15px;
+    color: #1e293b;
+}
+
+#searchInput::placeholder {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+#searchInput::-webkit-search-decoration,
+#searchInput::-webkit-search-cancel-button,
+#searchInput::-webkit-search-results-button,
+#searchInput::-webkit-search-results-decoration {
+    display: none;
+}
+
+#searchBtn {
+    background-color: #3b82f6;
+    border: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.9s ease, transform 0.9s ease;
+}
+
+#searchBtn:hover {
+    background-color: #2563eb;
+    transform: scale(1.05);
+}
+
+#searchBtn:active {
+    transform: scale(2s);
+}
+
+#ss {
+    color: #ffffff;
+    font-size: 15px;
+}
+
+/* عنوان وعنصر الخريطة */
+.body1 h3 {
+    font-size: 24px;
+    color: #8bb3df;
+    font-weight: 700;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 8px;
+}
+
+.body1 h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 50%;
+    transform: translateX(50%);
+    width: 50px;
+    height: 3px;
+    background-color: #5b6c7e;
+    border-radius: 2px;
+}
+
+.map-container {
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    border: 3px solid #5b6c7e;
+    margin: 20px auto;
+}
+
+.map-container iframe {
+    width: 100% !important;
+    height: 100% !important;
+    border: 0 !important;
+    border-radius: 50%;
+}
+
+/* ==========================================
+   4. الفوتر (ثابت بالأسفل حتى بالهواتف الطويلة)
+   ========================================== */
+footer {
+    margin-top: auto; /* يجبر الفوتر على الالتصاق بالأسفل تماماً */
+    width: 100%;
+}
+
+.foaterOfThepage {
+    background-color: #0d4b64;
+    padding: 30px 20px;
+    text-align: center;
+    font-size: 18px;
+    box-shadow: 0 -5px 20px rgba(17, 226, 191, 0.3);
+    color: #849ae4bd;
+}
+
+.foaterOfThepage p {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* تأثير الهايلايت */
+.custom-highlight {
+    background-color: #0044ff !important;
+    color: #ffffff !important;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0, 68, 255, 0.3);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================
+   5. التجاوب مع الشاشات والموبايل (Responsive)
+   ========================================== */
+@media (max-width: 992px) {
+    .body1 {
+        padding: 20px 15px;
+    }
+    #hh {
+        font-size: 28px;
+    }
+    .map-container {
+        width: 280px;
+        height: 280px;
+    }
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 10px 15px;
+    }
+    header h1 {
+        font-size: 16px;
+    }
+    .kk {
+        height: 45px;
+    }
+    .cartoon-character video {
+        width: 45px;
+        height: 45px;
+    }
+    #hh {
+        font-size: 24px;
+    }
+    .search-container {
+        max-width: 90%;
+    }
+    .map-container {
+        width: 240px;
+        height: 240px;
+    }
+    .foaterOfThepage {
+        font-size: 16px;
+    }
+}
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="ul1" id="ul1">
+        <i class="fa-solid fa-bars"></i>
+        <ul>
+          <li><a href="active.html">حالة النشاط</a></li>      
+          <li><a href="Activities.html">الأنشطة</a></li>
+          <li><a href="ask.html">حجز الملعب</a></li>
+          <li>  <a href="messages.html">رسائل جماعية هامة</a></li>
+          <li><a href="games.html">ألعاب متاحة</a></li>
+          <li><a href="workers.html"> هيئة العمل </a></li>
+          <li><a href="global.html">نبذة عامة</a></li>
+        </ul>
+      </div>
+
+      <h1>مركز شباب المحلاوي</h1>
+
+      <div class="header-logo-group">
+        <div class="cartoon-character">
+          <video autoplay loop muted playsinline>
+            <source src="nnn.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <img src="kh1.png" alt="logo" class="kk" />
+      </div>
+    </header>
+
+    <main class="body1" id="body1">
+      <h2 id="hh">مرحبا خالد</h2>
+      
+      <form onsubmit="event.preventDefault(); performSearch();">
+        <div class="search-container">
+          <button type="submit" id="searchBtn">
+            <i class="fa-solid fa-magnifying-glass" id="ss"></i>
+          </button>
+          <input type="search" id="searchInput" placeholder="ابحث هنا...">
+        </div>
+      </form>
+      
+      <h3>موقعنا الجغرافي</h3>
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d964.2650907362288!2d31.86616469960835!3d31.2013701308117!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14f9c3512c6ba30f%3A0x959eee74a208ba52!2z2YXYsdmD2LIg2LTYqNin2Kgg2KfZhNmF2K3ZhNin2YjZig!5e1!3m2!1sen!2seg!4v1781746694359!5m2!1sen!2seg"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </main>
+
+    <footer>
+      <div class="foaterOfThepage">
+        كلمنا على : 01031508615
+        <p>هذا الموقع تم برمجته من قبل: Life_company</p>
+      </div>    
+    </footer>
+
+    <script src="kh.js"></script>
+  </body>
+</html>
