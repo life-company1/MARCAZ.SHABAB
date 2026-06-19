@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="kh.css">
+     <link rel="icon" type="image/png" href="kh1 .jpeg" sizes="32x32" />
+     <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    
+    />
+    <title> sign in </title>
+
+</head>
+<body>
+    
+<style>
+      /* --- 1. إعدادات عامة وتصفير الهوامش --- */
+      html, body {
+          height: 100%;
+      }
+
+      * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+          direction: rtl;
+          background: linear-gradient(135deg, #144574bb, #166b67, #2b6c77, #3e595a);
+          color: bisque;
+          min-height: 100vh;
+          overflow-x: hidden;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          padding: 20px;
+      }
+
+      /* --- 2. تنسيق حاوية الفورم --- */
+      .form-container {
+          width: 100%;
+          max-width: 450px;
+          margin: 60px auto 40px auto; /* مسافة متناسقة من الأعلى */
+          padding: 30px;
+          background-color: rgba(0, 0, 0, 0.4); /* خلفية شفافة كما طلبت */
+          border-radius: 12px;
+          box-shadow: 0 4px 15px rgb(17, 228, 182);
+      }
+
+      /* عنوان الفورم */
+      .form-container h2 {
+          text-align: center;
+          color: bisque; /* تعديل اللون ليتماشى مع لون النص العام ويكون واضحاً */
+          margin-bottom: 25px;
+          font-size: 24px;
+      }
+
+      /* تقسيم الحقول */
+      .form-group {
+          margin-bottom: 20px;
+          display: flex;
+          flex-direction: column;
+      }
+
+      /* تنسيق الـ Labels */
+      .form-group label {
+          font-size: 14px;
+          font-weight: 600;
+          color: bisque;
+          margin-bottom: 8px;
+      }
+
+      /* تنسيق Inputs */
+      .form-group input {
+          padding: 12px 15px;
+          font-size: 15px;
+          border: 1px solid #cccccc;
+          border-radius: 8px;
+          outline: none;
+          transition: all 0.3s ease;
+          background-color: #f9f9f9;
+          color: #333;
+      }
+
+      /* تأثير الـ Focus */
+      .form-group input:focus {
+          border-color: #007bff;
+          background-color: #ffffff;
+          box-shadow: 0 0 5px rgba(6, 167, 153, 0.671);
+      }
+
+      .form-group input[type="date"] {
+          font-family: inherit;
+          cursor: pointer;
+      }
+
+      /* --- 3. أزرار التحكم --- */
+      /* زر حفظ البيانات */
+      .submit-btn {
+          width: 100%;
+          padding: 12px;
+          font-size: 16px;
+          font-weight: bold;
+          color: #ffffff;
+          background-color: #00ffaa86;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+          margin-top: 10px;
+      }
+
+      .submit-btn:hover {
+          background-color: #000000;
+          color: #00ffaa;
+      }
+
+      /* زر Let's Go السفلي المتجاوب */
+      .bb {
+          width: 100%;
+          max-width: 400px;
+          height: 45px;
+          border-radius: 15px;
+          box-shadow: 0 10px 20px #07bea098;
+          background-color: #1cb98a;
+          color: #e9e9e9;
+          font-size: 16px;
+          font-weight: bold;
+          border: none;
+          cursor: pointer;
+          margin: 20px auto; /* توسط تلقائي ومسافة أمان من الأسفل */
+          transition: all 0.3s ease;
+      }
+
+      .bb:disabled {
+          background-color: #555555;
+          box-shadow: none;
+          color: #aaaaaa;
+          cursor: not-allowed;
+          opacity: 0.6;
+      }
+
+      .bb:not(:disabled):hover {
+          background-color: #138562;
+          transform: translateY(-2px);
+      }
+
+      /* --- 4. مؤشرات الحالة والأنيميشن --- */
+      .status-indicator {
+          font-weight: bold;
+          font-size: 20px;
+          text-align: center;
+          padding: 10px;
+          margin-top: 15px;
+      }
+
+      .status-indicator.open .text {
+          color: #2ecc71;
+          animation: glowOpen 2s infinite alternate;
+      }
+
+      .status-indicator.closed .text {
+          color: #e74c3c;
+          animation: glowClosed 2s infinite alternate;
+      }
+
+      @keyframes glowOpen {
+          from { text-shadow: 0 0 5px #2ecc71, 0 0 10px #2ecc71; }
+          to   { text-shadow: 0 0 20px #2ecc71, 0 0 40px #2ecc71; }
+      }
+
+      @keyframes glowClosed {
+          from { text-shadow: 0 0 5px #e74c3c, 0 0 10px #e74c3c; }
+          to   { text-shadow: 0 0 20px #e74c3c, 0 0 40px #e74c3c; }
+      }
+
+      /* --- 5. شاشات الميديا (Responsive) --- */
+      @media (max-width: 500px) {
+          .form-container {
+              width: 95%;
+              padding: 20px;
+              margin-top: 30px;
+          }
+          .bb {
+              width: 90%;
+              height: 42px;
+          }
+      }
+    </style>
+<div class="form-container">
+  <form id="userDataForm">
+    <h2>إنشاء حساب جديد</h2>
+    
+    <!-- حقل اسم المستخدم -->
+    <div class="form-group">
+      <label for="username">اسم المستخدم (Username):</label>
+      <input type="text" id="username" placeholder="أدخل اسمك بالكامل">
+    </div>
+
+    <!-- حقل العنوان -->
+    <div class="form-group">
+      <label for="address">العنوان:</label>
+      <input type="text" id="address" name="address" placeholder="المدينة، الشارع، المبنى">
+    </div>
+
+    <!-- حقل تاريخ الميلاد -->
+    <div class="form-group">
+      <label for="birthdate">تاريخ الميلاد:</label>
+      <input type="date" id="birthdate" name="birthdate">
+    </div>
+
+    <!-- حقل البريد الإلكتروني -->
+    <div class="form-group">
+      <label for="email">البريد الإلكتروني:</label>
+      <input type="email" id="email" name="email" placeholder="name@domain.com">
+    </div>
+
+    <!-- زر الإرسال -->
+    <button type="submit" class="submit-btn">حفظ البيانات</button>
+  </form>
+</div>
+
+<button id="mm" class="bb" disabled> let's go </button>
+
+
+<
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const myForm = document.getElementById('userDataForm');
+  const letsGoBtn = document.getElementById("mm");
+
+  myForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const birthdate = document.getElementById('birthdate').value;
+    const email = document.getElementById('email').value.trim();
+
+    // التحقق من أن الاسم مكتوب بشكل صحيح (حروف فقط)
+    const nameRegex = /^[\p{L}\s]+$/u;
+    if (!nameRegex.test(username)) {
+      alert("⚠️ يرجى إدخال اسم شخص حقيقي (حروف فقط).");
+      return;
+    }
+
+    // حفظ البيانات مع وقت التسجيل
+    const newUser = {
+      id: Date.now(),
+      username,
+      address,
+      birthdate,
+      email,
+      loginTime: new Date().toLocaleString("ar-EG", { 
+        dateStyle: "short", 
+        timeStyle: "short" 
+      })
+    };
+
+    let usersList = JSON.parse(localStorage.getItem('allUsers')) || [];
+    usersList.push(newUser);
+    localStorage.setItem('allUsers', JSON.stringify(usersList));
+
+    // حفظ المستخدم الحالي لعرضه في الصفحة الرئيسية
+    localStorage.setItem("currentUser", JSON.stringify(newUser));
+
+    this.reset();
+
+    // تفعيل زر Lets Go بعد الحفظ
+    letsGoBtn.disabled = false;
+  });
+
+  // عند الضغط على زر Lets Go بعد التفعيل
+  letsGoBtn.addEventListener("click", () => {
+    window.location.href = "kh22.html"; // ينقل للصفحة الرئيسية
+  });
+});
+
+</script>
+
+
+</body>
+</html>
